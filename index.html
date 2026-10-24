@@ -451,6 +451,31 @@
           </div>
         </div>
       </div>
+
+      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm max-w-2xl mx-auto space-y-5">
+        <div>
+          <h2 class="text-base sm:text-lg font-extrabold text-slate-900">Sinkronisasi Otomatis ke Email</h2>
+          <p class="text-xs text-slate-500 mt-1">Setiap ada perubahan data (cerita siswa, daftar siswa, catatan observasi, jurnal mood), cadangan dikirim otomatis ke email Anda berisi file JSON dan CSV.</p>
+        </div>
+        <div class="space-y-3">
+          <label class="block text-xs font-bold text-slate-700">Email tujuan:</label>
+          <input type="email" id="inputSyncEmail" value="muhhilmyafiqmn@gmail.com" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs font-mono-code text-slate-600 outline-none">
+          <label for="inputSyncUrl" class="block text-xs font-bold text-slate-700">URL Web App Google Apps Script:</label>
+          <input type="url" id="inputSyncUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-mono-code outline-none focus:border-emerald-500">
+          <label class="flex items-center gap-2 text-xs font-semibold text-slate-700">
+            <input type="checkbox" id="chkAutoSync" checked class="w-4 h-4 accent-emerald-600"> Kirim otomatis (2 menit setelah perubahan terakhir)
+          </label>
+          <p id="syncStatus" class="text-[11px] text-slate-500"></p>
+          <div class="flex flex-wrap items-center gap-2 pt-1">
+            <button onclick="saveSyncSettings()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-2">
+              <i data-lucide="mail-check" class="w-4 h-4"></i> Simpan Pengaturan
+            </button>
+            <button onclick="syncNow()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-bold text-xs rounded-xl transition flex items-center gap-2">
+              <i data-lucide="send" class="w-4 h-4"></i> Kirim Sekarang
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
 
   </main>
@@ -662,7 +687,7 @@
         onDataLoaded({
           roster: cachedRoster ? JSON.parse(cachedRoster) : defaultRoster,
           stories: cachedStories ? JSON.parse(cachedStories) : defaultStories,
-          moods: [],
+          moods: JSON.parse(localStorage.getItem('tb_moods') || '[]'),
           hasApiKey: false
         });
       }
@@ -815,6 +840,14 @@
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         google.script.run.submitStudentMood(payload);
+      } else {
+        appState.moods.push({
+          waktu: new Date().toISOString().slice(0, 16).replace('T', ' '),
+          nama_siswa: payload.studentName,
+          mood: payload.mood,
+          pemicu: payload.triggers
+        });
+        localStorage.setItem('tb_moods', JSON.stringify(appState.moods));
       }
 
       appState.embunCount += 2;
@@ -1293,6 +1326,129 @@
     localStorage.setItem('tb_stories', JSON.stringify(appState.stories));
   }
 }
+
+  // =====================================================================
+  // SINKRONISASI OTOMATIS KE EMAIL (via Google Apps Script Web App)
+  // =====================================================================
+  const SYNC_EMAIL = 'muhhilmyafiqmn@gmail.com';
+  const SYNC_DELAY_MS = 2 * 60 * 1000;
+  const SYNC_KEYS = ['tb_roster', 'tb_stories', 'tb_moods'];
+  let syncTimer = null;
+  let syncBusy = false;
+
+  const _rawSetItem = Storage.prototype.setItem;
+  Storage.prototype.setItem = function (k, v) {
+    const old = this.getItem(k);
+    _rawSetItem.call(this, k, v);
+    if (this === localStorage && SYNC_KEYS.includes(k) && old !== v) markSyncDirty();
+  };
+
+  function syncUrl() { return (localStorage.getItem('tb_sync_url') || '').trim(); }
+  function syncAuto() { return localStorage.getItem('tb_sync_auto') !== '0'; }
+
+  function markSyncDirty() {
+    _rawSetItem.call(localStorage, 'tb_sync_dirty', '1');
+    scheduleSync();
+    updateSyncStatus();
+  }
+
+  function scheduleSync() {
+    if (!syncAuto() || !syncUrl()) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => sendBackup(false), SYNC_DELAY_MS);
+  }
+
+  function csvCell(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }
+
+  function buildSnapshot() {
+    const head = ['Waktu', 'Nama Siswa', 'Mood', 'Pemicu', 'Urgensi', 'Sentimen', 'Isi Cerita', 'Rekomendasi Guru', 'Sudah Ditindaki'];
+    const rows = appState.stories.map(s => [
+      s.waktu, s.nama_siswa, s.mood, s.pemicu, s.urgensi, s.sentimen,
+      s.isi_cerita, s.rekomendasi_guru, s.sudah_ditindaki ? 'Ya' : 'Belum'
+    ].map(csvCell).join(','));
+    return {
+      email: SYNC_EMAIL,
+      waktu_backup: new Date().toISOString(),
+      jumlah_siswa: appState.roster.length,
+      jumlah_cerita: appState.stories.length,
+      roster: appState.roster,
+      stories: appState.stories,
+      moods: appState.moods,
+      csv: head.map(csvCell).join(',') + '\n' + rows.join('\n')
+    };
+  }
+
+  async function sendBackup(manual) {
+    const url = syncUrl();
+    if (!url) {
+      if (manual) showToast('Isi URL Web App Apps Script dulu di tab Pengaturan', 'error');
+      return false;
+    }
+    if (syncBusy) return false;
+    syncBusy = true;
+    try {
+      await fetch(url, {
+        method: 'POST',
+        mode: 'no-cors',
+        keepalive: false,
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(buildSnapshot())
+      });
+      _rawSetItem.call(localStorage, 'tb_sync_dirty', '0');
+      _rawSetItem.call(localStorage, 'tb_sync_last', new Date().toISOString());
+      if (manual) showToast('Cadangan dikirim ke ' + SYNC_EMAIL, 'success');
+      return true;
+    } catch (e) {
+      if (manual) showToast('Gagal mengirim, akan dicoba lagi otomatis', 'error');
+      return false;
+    } finally {
+      syncBusy = false;
+      updateSyncStatus();
+    }
+  }
+
+  function syncNow() { sendBackup(true); }
+
+  function saveSyncSettings() {
+    const url = document.getElementById('inputSyncUrl').value.trim();
+    if (url && !/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(url)) {
+      showToast('URL harus berformat https://script.google.com/macros/s/.../exec', 'error');
+      return;
+    }
+    _rawSetItem.call(localStorage, 'tb_sync_url', url);
+    _rawSetItem.call(localStorage, 'tb_sync_auto', document.getElementById('chkAutoSync').checked ? '1' : '0');
+    showToast('Pengaturan sinkronisasi email tersimpan', 'success');
+    if (localStorage.getItem('tb_sync_dirty') === '1') scheduleSync();
+    updateSyncStatus();
+  }
+
+  function updateSyncStatus() {
+    const el = document.getElementById('syncStatus');
+    if (!el) return;
+    const last = localStorage.getItem('tb_sync_last');
+    const dirty = localStorage.getItem('tb_sync_dirty') === '1';
+    let t = syncUrl() ? '' : '⚠️ Belum aktif: URL Apps Script belum diisi. ';
+    t += last ? 'Terakhir terkirim: ' + new Date(last).toLocaleString('id-ID') + '. ' : 'Belum pernah terkirim. ';
+    if (dirty && syncUrl()) t += 'Ada perubahan yang menunggu dikirim.';
+    el.textContent = t;
+  }
+
+  function initSync() {
+    document.getElementById('inputSyncUrl').value = syncUrl();
+    document.getElementById('chkAutoSync').checked = syncAuto();
+    updateSyncStatus();
+    if (localStorage.getItem('tb_sync_dirty') === '1') scheduleSync();
+    window.addEventListener('online', () => {
+      if (localStorage.getItem('tb_sync_dirty') === '1' && syncAuto()) sendBackup(false);
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' && localStorage.getItem('tb_sync_dirty') === '1' && syncAuto() && syncUrl()) {
+        clearTimeout(syncTimer);
+        sendBackup(false);
+      }
+    });
+  }
+  window.addEventListener('load', initSync);
   </script>
 </body>
 </html>
