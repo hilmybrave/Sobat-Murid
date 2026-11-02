@@ -1,1454 +1,763 @@
 <!DOCTYPE html>
-<html lang="id" class="h-full bg-slate-50">
+<html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>TEMAN BERCERITA • Kelas 6 MI Arifah</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#031a19">
+<meta name="description" content="SOBAT MURID – ruang aman bercerita untuk murid madrasah.">
+<title>SOBAT MURID – Madrasah Modern</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== Tema: deep teal + metallic gold ===== */
+:root{
+  --bg:#031a19; --ink:#eef6f1; --mute:#a3c2b9;
+  --gold:#d9b35a; --gold-hi:#f4e0a3; --gold-lo:#a98230;
+  --em:#1fae8a; --em-lo:#0e6f5c;
+  --danger:#e8786f;
+  --g:rgba(255,255,255,.07); --gb:rgba(217,179,90,.24);
+}
+*{box-sizing:border-box;margin:0}
+body{font:15px/1.6 'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);background:var(--bg);min-height:100vh;overflow-x:hidden;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+h1,h2,h3{font-family:Amiri,Georgia,serif;line-height:1.2}
+h4{font-size:14px;font-weight:700;color:var(--gold);margin:14px 0 6px}
+#scene{position:fixed;inset:0;z-index:-1}#scene svg{width:100%;height:100%;display:block}
+.glass{background:var(--g);border:1px solid var(--gb);border-radius:22px;backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);box-shadow:0 20px 50px -20px rgba(0,0,0,.6)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 14px 40px}
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+/* Header & logo */
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:14px 0}
+.brand{display:flex;align-items:center;gap:10px;cursor:pointer;background:none;border:0;color:inherit;font:inherit;text-align:left}
+.app-logo{display:block;object-fit:contain}
+.app-logo.gone{display:none}
+#app-logo{width:46px;height:46px}
+.hero-logo{width:min(44vw,150px);height:auto;margin:0 auto 12px;filter:drop-shadow(0 8px 22px rgba(217,179,90,.3))}
+.brand b{font:700 21px Amiri,serif;display:block;line-height:1;color:var(--gold-hi)}.brand small{color:var(--mute);font-size:11px}
 
-  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+/* Tombol */
+.btn{font-weight:700;font-size:14px;font-family:inherit;border:0;border-radius:14px;padding:11px 18px;cursor:pointer;color:#052321;background:linear-gradient(135deg,var(--gold-hi),var(--gold) 55%,var(--gold-lo));transition:transform .25s,opacity .25s;box-shadow:0 8px 20px -8px rgba(217,179,90,.6)}
+.btn:hover:not(:disabled){transform:translateY(-2px)}.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.gh{background:var(--g);color:var(--ink);border:1px solid var(--gb);box-shadow:none}
+.btn.em{background:linear-gradient(135deg,#46d6ad,var(--em) 60%,var(--em-lo));color:#032620}
+.btn.sm{padding:7px 12px;font-size:13px;border-radius:11px}
+.btn.dn{background:linear-gradient(135deg,#f6a39b,var(--danger));color:#2a0b08}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+[role=dialog]:focus{outline:none}
 
-  <!-- Lucide Icons CDN -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+main.in{animation:in .5s cubic-bezier(.2,.8,.2,1)}@keyframes in{from{opacity:0;transform:translateY(12px)}}
+.card{padding:22px;margin-bottom:14px}.hero{padding:30px 22px;text-align:center;max-width:560px;margin:3vh auto 0}
+.ar{font:700 32px Amiri,serif;color:var(--gold)}
+h2{font-size:27px;margin:6px 0}h3{font-size:21px;margin-bottom:8px;color:var(--gold)}
+p.mu,.mu{color:var(--mute)}
+label{display:block;font-weight:700;font-size:13px;margin:12px 0 6px;text-align:left}
+select,input,textarea{width:100%;padding:11px 13px;border-radius:13px;border:1px solid var(--gb);background:rgba(3,26,24,.65);color:var(--ink);font:inherit}
+textarea{min-height:90px;resize:vertical}select option{color:#052321}
 
-  <!-- Chart.js CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+/* Pilihan mood */
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(96px,1fr));margin:10px 0}
+.opt{padding:12px 6px;border-radius:16px;border:1.5px solid var(--gb);background:var(--g);color:var(--ink);font-weight:600;font-size:14px;font-family:inherit;cursor:pointer;transition:all .3s}
+.opt span{display:block;font-size:28px}.opt:hover{transform:translateY(-3px)}
+.opt.on{border-color:var(--gold);background:rgba(217,179,90,.22);box-shadow:0 0 0 3px rgba(217,179,90,.25)}
+.two{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(270px,1fr))}
+.stats{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin-bottom:14px}
+.stat{padding:14px}.stat b{font:700 28px Amiri,serif;color:var(--gold);display:block}
 
-  <!-- html2pdf.js CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+/* Tab Wali Kelas */
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:4px 0 12px}.tabs .btn{white-space:nowrap}
+.cnt{display:inline-block;min-width:20px;margin-left:6px;padding:0 6px;border-radius:99px;background:var(--danger);color:#2a0b08;font-size:11px;font-weight:800;line-height:18px;text-align:center}
 
-  <style>
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #f8fafc;
-      color: #1e293b;
-      -webkit-tap-highlight-color: transparent;
-      overscroll-behavior-y: none;
-    }
-    .font-mono-code {
-      font-family: 'JetBrains Mono', monospace;
-    }
-    @keyframes floatSlow {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-8px) rotate(3deg); }
-    }
-    .animate-float {
-      animation: floatSlow 3.5s ease-in-out infinite;
-    }
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f5f9;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
-  </style>
+ul.l{list-style:none;padding:0}ul.l li{display:flex;align-items:center;gap:6px;padding:7px 0;border-bottom:1px solid var(--gb)}ul.l li span{flex:1;overflow-wrap:anywhere}
+.ib{border:0;background:none;color:var(--ink);cursor:pointer;font-size:16px;padding:4px 8px;border-radius:8px}.ib:hover{background:var(--g)}
+.add{display:flex;gap:8px;margin-top:10px}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{padding:5px 12px;border-radius:99px;background:rgba(31,174,138,.16);border:1px solid rgba(31,174,138,.45);font-size:13px;color:inherit;font-family:inherit;cursor:pointer}
+.chip.urg-mendesak{background:rgba(232,120,111,.14);border-color:rgba(232,120,111,.6)}
+.chip.on{background:rgba(217,179,90,.3);border-color:var(--gold)}
+.ann{padding:12px 14px;border-left:4px solid var(--gold);background:rgba(217,179,90,.1);border-radius:0 12px 12px 0;margin:8px 0}
+.alert{border-color:rgba(232,120,111,.6);display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+
+/* Grafik */
+.bars{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;height:190px;margin:12px 0 6px}
+.col{display:grid;grid-template-rows:1fr auto;text-align:center;font-size:11px;color:var(--mute);min-width:0}.sw{display:flex;align-items:flex-end;justify-content:center}
+.stack{width:60%;max-width:44px;display:flex;flex-direction:column-reverse;border-radius:9px;overflow:hidden;transition:height .6s}
+.leg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--mute)}.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px}
+.row{display:grid;grid-template-columns:120px 1fr 36px;gap:10px;align-items:center;margin:8px 0;font-size:14px}
+.pb{height:10px;border-radius:9px;background:rgba(255,255,255,.12);overflow:hidden;margin:8px 0}.pb i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--em),var(--gold));transition:width .3s}
+
+/* Tabel riwayat */
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13px;min-width:640px}
+.rt{min-width:880px}
+th,td{padding:9px 10px;border-bottom:1px solid var(--gb);text-align:left;vertical-align:top}
+th{color:var(--gold-hi);background:rgba(217,179,90,.12);border-bottom:2px solid var(--gold);font-weight:700;white-space:nowrap}
+tr.crit td:first-child{box-shadow:inset 4px 0 0 var(--danger)}
+.clamp{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;max-width:220px}
+.acts{display:flex;gap:6px;white-space:nowrap}
+input[type=checkbox]{width:22px;height:22px;accent-color:var(--gold);padding:0}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.bar input{flex:2;min-width:200px;width:auto}.bar select{flex:1;min-width:150px;width:auto}
+
+/* Badge urgensi */
+.ug{display:inline-flex;align-items:center;gap:6px;padding:3px 11px;border-radius:99px;font-weight:700;font-size:12px;line-height:1.4;border:1px solid;white-space:nowrap}
+.ug::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.ug-rendah{color:#6fe0bd;background:rgba(31,174,138,.15);border-color:rgba(31,174,138,.5)}
+.ug-sedang{color:var(--gold-hi);background:rgba(217,179,90,.18);border-color:var(--gold)}
+.ug-mendesak{color:#2a0b08;background:linear-gradient(135deg,#f6a39b,var(--danger));border-color:var(--gold);box-shadow:0 0 0 2px rgba(217,179,90,.35)}
+
+/* Chat */
+.chat{display:flex;flex-direction:column;height:min(66vh,620px)}#msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+.m{max-width:86%;padding:10px 14px;border-radius:18px;animation:in .35s;overflow-wrap:anywhere}
+.m.b{background:rgba(31,174,138,.18);border:1px solid rgba(31,174,138,.38);border-bottom-left-radius:5px;align-self:flex-start}
+.m.u{background:rgba(217,179,90,.22);border:1px solid rgba(217,179,90,.42);border-bottom-right-radius:5px;align-self:flex-end}
+form.cf{display:flex;gap:8px;padding:12px;border-top:1px solid var(--gb)}
+
+/* Game */
+.stage{max-width:380px;margin:8px auto;text-align:center}.plant{width:100%;display:block}
+#can{font-size:56px;display:inline-block;transition:transform .4s;user-select:none}.pour #can{transform:rotate(-25deg)}
+
+/* Modal */
+.ov{position:fixed;inset:0;z-index:50;display:flex;padding:16px;overflow-y:auto;background:rgba(2,18,16,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);animation:fade .3s}
+@keyframes fade{from{opacity:0}}
+.ov .glass{width:100%;max-width:400px;margin:auto;padding:26px;background:rgba(10,50,45,.82);animation:in .4s;text-align:center}
+.ov .glass.wide{max-width:640px;text-align:left}
+.dh{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:10px}
+.tr{display:flex;flex-direction:column;gap:8px;max-height:min(42vh,380px);overflow-y:auto;padding:12px;border:1px solid var(--gb);border-radius:16px;background:rgba(0,0,0,.2)}
+.tr .m small{display:block;font-size:11px;opacity:.7;margin-bottom:2px}
+.dctl{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin:12px 0}.dctl>label{flex:1;min-width:180px;margin:0}
+.chk{display:flex;align-items:center;gap:8px}
+.mfoot{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+
+.err{color:#ffb4b4;font-size:13px;min-height:20px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,30px);opacity:0;padding:11px 20px;border-radius:99px;z-index:60;pointer-events:none;transition:all .4s;background:rgba(4,32,29,.96);border:1px solid var(--gold);max-width:92vw;text-align:center}#toast.on{opacity:1;transform:translate(-50%,0)}
+.empty{text-align:center;padding:22px;color:var(--mute)}
+.spin{width:34px;height:34px;border:3px solid var(--gb);border-top-color:var(--gold);border-radius:50%;animation:sp 1s linear infinite;margin:14px auto}@keyframes sp{to{transform:rotate(360deg)}}
+code{background:rgba(0,0,0,.3);padding:1px 6px;border-radius:6px;font-size:13px}
+
+#rpt{display:none}
+@media print{body>*:not(#rpt){display:none!important}#rpt{display:block;color:#000;background:#fff;padding:24px;font-family:sans-serif}#rpt table{min-width:0}#rpt td,#rpt th{border:1px solid #888;color:#000;background:none}}
+@media(max-width:560px){.row{grid-template-columns:96px 1fr 32px}h2{font-size:23px}.card{padding:16px}.m{max-width:94%}#app-logo{width:40px;height:40px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
 </head>
+<body>
+<div id="scene" aria-hidden="true"><svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMax slice"><defs><linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#031a19"/><stop offset=".55" stop-color="#0b4a43"/><stop offset="1" stop-color="#16846a"/></linearGradient><pattern id="pt" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M40 6l10 24 24 10-24 10-10 24-10-24-24-10 24-10z" fill="none" stroke="#d9b35a" stroke-opacity=".1"/></pattern></defs><rect width="1200" height="700" fill="url(#sk)"/><rect width="1200" height="700" fill="url(#pt)"/><circle cx="1020" cy="110" r="38" fill="#f4e0a3"/><circle cx="1037" cy="99" r="35" fill="#053330"/><g fill="#f4e0a3" opacity=".7"><circle cx="140" cy="90" r="2"/><circle cx="340" cy="150" r="1.5"/><circle cx="570" cy="70" r="2"/><circle cx="820" cy="140" r="1.5"/><circle cx="920" cy="50" r="2"/></g><path d="M0 560Q250 470 520 540T1200 500V700H0Z" fill="#0f6b55"/><g fill="#04302b"><rect x="470" y="400" width="260" height="170"/><path d="M520 400a80 80 0 0 1 160 0z" fill="#d9b35a"/><rect x="596" y="300" width="8" height="22" fill="#d9b35a"/><rect x="420" y="330" width="34" height="240"/><rect x="746" y="330" width="34" height="240"/></g><g fill="#d9b35a"><path d="M420 330l17-40 17 40z"/><path d="M746 330l17-40 17 40z"/></g><g fill="#f4e0a3" opacity=".85"><path d="M500 570v-70a18 18 0 0 1 36 0v70z"/><path d="M582 570v-70a18 18 0 0 1 36 0v70z"/><path d="M664 570v-70a18 18 0 0 1 36 0v70z"/></g><path d="M0 620Q300 560 600 610T1200 590V700H0Z" fill="#0a5a47"/></svg></div>
+<div id="app" class="wrap"></div><div id="modal"></div><div id="toast" role="status"></div><div id="rpt"></div>
 
-<body class="min-h-full flex flex-col bg-slate-50 text-slate-800 selection:bg-emerald-500 selection:text-white pb-12 sm:pb-0">
+<script>
+'use strict';
 
-  <div id="toastContainer" class="fixed top-4 right-4 sm:top-5 sm:right-5 z-50 flex flex-col gap-2 max-w-xs sm:max-w-sm w-full pointer-events-none px-2 sm:px-0"></div>
+/* =====================================================================
+   1. KONFIGURASI  — hanya bagian ini yang perlu Anda ubah
+   ===================================================================== */
+const CONFIG = {
+  // URL Web App Google Apps Script (berakhiran /exec)
+  GAS_URL: 'https://script.google.com/macros/s/AKfycbySZIlH-uv3HeRSF-OpPLyoNe7DkAudosSwvjsDnMCgVMqUbQfctv1iAtKAjVzUrCoAHg/exec',
+  TIMEOUT_MS: 25000,
+  CHAT_TIMEOUT_MS: 40000,
+  CACHE_KEY: 'sm_cfg_cache'
+  // Catatan: model AI default ditetapkan di Code.gs (CFG.MODELS), bukan dipilih pengguna.
+};
 
-  <div id="camouflageOverlay" class="hidden fixed inset-0 z-50 bg-slate-100 overflow-y-auto p-3 sm:p-8">
-    <div class="max-w-3xl mx-auto bg-white rounded-3xl shadow-xl border border-slate-200 p-5 sm:p-8 my-auto">
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-200 pb-4 mb-5 gap-3">
-        <div>
-          <span class="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-extrabold uppercase bg-blue-100 text-blue-700 px-3 py-1 rounded-full">
-            📐 Portal Latihan Mandiri • Kelas 6 MI Arifah
-          </span>
-          <h1 class="text-lg sm:text-2xl font-extrabold text-slate-900 mt-2">Latihan Mandiri Matematika & IPA</h1>
-        </div>
-        <button onclick="toggleCamouflage(false)" class="text-xs bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white px-4 py-2.5 rounded-2xl font-bold transition flex items-center justify-center gap-2 shadow-sm self-start sm:self-auto">
-          <i data-lucide="shield-check" class="w-4 h-4"></i> Kembali ke Ruang Cerita
-        </button>
-      </div>
-      <div class="space-y-4 text-xs sm:text-sm text-slate-700">
-        <p class="font-bold text-slate-900">1. Sebuah kubus memiliki panjang rusuk 12 cm. Berapakah volume kubus tersebut?</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <button class="p-3 bg-slate-50 hover:bg-blue-50 rounded-xl text-left border border-slate-200 text-xs font-medium">A. 1.244 cm³</button>
-          <button class="p-3 bg-blue-50/80 rounded-xl text-left border-2 border-blue-500 text-xs font-extrabold text-blue-800">B. 1.728 cm³ (Benar)</button>
-        </div>
-        <p class="font-bold text-slate-900 pt-3">2. Bagian tumbuhan yang berfungsi menyerap air dan hara dari tanah adalah...</p>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <button class="p-3 bg-blue-50/80 rounded-xl text-left border-2 border-blue-500 text-xs font-extrabold text-blue-800">A. Akar (Benar)</button>
-          <button class="p-3 bg-slate-50 hover:bg-blue-50 rounded-xl text-left border border-slate-200 text-xs font-medium">B. Batang</button>
-        </div>
-      </div>
-    </div>
-  </div>
+/* =====================================================================
+   2. UTILITAS & DATA STATIS
+   ===================================================================== */
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = x => String(x).padStart(2, '0');
+const fmt = t => { const d = new Date(t); return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`; };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+const today = () => new Date().getDay();
+const DAYS = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'], SCH = [1,2,3,4,5,6];
 
-  <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-      
-      <!-- Brand & Title -->
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-md flex-shrink-0">
-            <i data-lucide="heart-handshake" class="w-5 h-5 sm:w-6 sm:h-6"></i>
-          </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h1 class="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 leading-none">TEMAN BERCERITA</h1>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
-                MI Arifah
-              </span>
-            </div>
-            <p class="text-[11px] text-slate-500 mt-0.5">Ruang Konseling Digital & Dashboard Wali Kelas 6</p>
-          </div>
-        </div>
+const W = [
+  {k:'Cerah',e:'☀️',c:'#f2c94c'}, {k:'Berawan',e:'⛅',c:'#9bb8d3'}, {k:'Hujan',e:'🌧️',c:'#4f86e0'},
+  {k:'Badai',e:'⛈️',c:'#c06a7a'}, {k:'Pelangi',e:'🌈',c:'#1fae8a'}
+];
+const T = [
+  {k:'Tugas Sekolah',e:'📚'}, {k:'Pertemanan',e:'🤝'}, {k:'Keluarga',e:'🏠'},
+  {k:'Diri Sendiri',e:'❤️'}, {k:'Lainnya',e:'✨'}
+];
+const FB = {
+  Cerah:'Alhamdulillah, senang mendengar harimu cerah! ☀️',
+  Berawan:'Terima kasih sudah jujur. Hari berawan juga bagian dari hidup. ⛅',
+  Hujan:'Aku di sini menemanimu. Hujan pasti reda, insyaAllah. 🌧️',
+  Badai:'Perasaanmu sedang berat, dan itu tidak apa-apa. Tarik napas pelan ya. ⛈️',
+  Pelangi:'MasyaAllah, hatimu seperti pelangi! 🌈'
+};
+const wOf = k => W.find(w => w.k === k) || W[0];
 
-        <button onclick="toggleCamouflage(true)" class="md:hidden bg-amber-100 hover:bg-amber-200 active:scale-95 text-amber-900 text-xs font-extrabold px-3 py-2 rounded-xl flex items-center gap-1.5 border border-amber-300">
-          <i data-lucide="shield" class="w-4 h-4"></i> Kamuflase
-        </button>
-      </div>
+/* Tingkat urgensi */
+const URG = {rendah:{l:'Rendah',n:1}, sedang:{l:'Sedang',n:2}, mendesak:{l:'Mendesak',n:3}};
+const RX_CRIT = /bunuh diri|mengakhiri hidup|akhiri hidup|ingin mati|pengen mati|pengin mati|mau mati|lebih baik mati|tidak ingin hidup|gak mau hidup|ga mau hidup|menyakiti diri|melukai diri|silet|menyayat|gantung diri|dipukul|dipukuli|dianiaya|disiksa|dilecehkan|diperkosa|kekerasan|diancam|tidak aman|takut pulang|kabur dari rumah|minggat/i;
+const RX_MID = /dibully|di-bully|bully|bullying|diejek|dihina|dijauhi|dimusuhi|dikucilkan|menangis|nangis|takut|cemas|khawatir|stres|stress|depresi|putus asa|kesepian|dimarahi|dibentak|bertengkar|berantem|cerai|tidak mau sekolah|malas sekolah|nilai jelek|sedih banget|capek banget|lelah banget|tidak punya teman/i;
+const urgOf = l => URG[l.urgency] ? l.urgency : 'rendah';
+const badge = u => `<span class="ug ug-${u}">${URG[u].l}</span>`;
+function scoreUrgency(w, m, texts) {
+  const t = [m || '', ...texts].join(' \n ');
+  if (RX_CRIT.test(t)) return 'mendesak';
+  if (w === 'Badai' || RX_MID.test(t)) return 'sedang';
+  return 'rendah';
+}
 
-      <!-- Navigation Tabs -->
-      <div class="flex items-center gap-2">
-        <nav class="flex items-center gap-1 bg-slate-100 p-1 rounded-2xl border border-slate-200 w-full sm:w-auto overflow-x-auto no-scrollbar">
-          <button onclick="switchMainTab('student')" id="tabBtn-student" class="px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap bg-emerald-600 text-white shadow-sm">
-            <i data-lucide="smile-plus" class="w-4 h-4"></i> Ruang Siswa
-          </button>
-          <button onclick="requestTeacherAuth('teacher')" id="tabBtn-teacher" class="px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap text-slate-600 hover:bg-white">
-            <i id="teacherLockIcon" data-lucide="lock" class="w-3.5 h-3.5 text-amber-600"></i>
-            <span>Dashboard Wali Kelas</span>
-          </button>
-          <button onclick="requestTeacherAuth('nlp')" id="tabBtn-nlp" class="px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap text-slate-600 hover:bg-white">
-            <i data-lucide="settings" class="w-3.5 h-3.5 text-slate-500"></i>
-            <span>Pengaturan AI</span>
-          </button>
-        </nav>
+/* Data konfigurasi kelas (disimpan di Google Sheets) & state UI */
+const DEF = {names:['Bintang','Pelita','Embun','Cahaya'], titles:['Si Pemberani','Si Penyabar','Si Ceria','Si Rajin'], roster:{}, piket:{}, ann:[], hasKey:false};
+const D = JSON.parse(JSON.stringify(DEF));
+const S = {view:'boot', me:null, mood:{w:null,g:null,m:''}, saved:false, saving:false, logId:null, tab:'ringkas',
+  unlocked:false, token:'', logs:[], logsLoading:false, msgs:[], busy:false, p:0, mute:false,
+  flt:'all', urg:'all', q:'', sort:'urg', tries:0, until:0, err:''};
+let ac = null, hold = null, amb = null, cb = null, wel = true;
 
-        <button onclick="toggleCamouflage(true)" class="hidden md:flex bg-amber-100 hover:bg-amber-200 active:scale-95 text-amber-900 text-xs font-extrabold px-3 py-2.5 rounded-xl items-center gap-1.5 border border-amber-300 whitespace-nowrap transition">
-          <i data-lucide="shield" class="w-4 h-4"></i> Mode Kamuflase
-        </button>
-      </div>
+function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3000); }
 
-    </div>
-  </header>
+/* =====================================================================
+   3. LAPISAN API — langsung ke Google Apps Script (CORS)
+   ===================================================================== */
+const gasReady = () => /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec/.test(CONFIG.GAS_URL);
 
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-4 sm:py-6">
-
-    <!-- =======================================================================
-         TAB 1: RUANG SISWA
-    ======================================================================== -->
-    <section id="tabContent-student">
-
-      <!-- Onboarding Gate / Student Selection -->
-      <div id="studentOnboardingGate" class="max-w-xl mx-auto my-4 sm:my-8">
-        <div class="bg-white rounded-3xl border border-emerald-200 shadow-xl overflow-hidden">
-          <div class="bg-gradient-to-br from-emerald-600 to-teal-700 p-6 sm:p-8 text-white">
-            <div class="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full text-xs font-bold mb-3">
-              <i data-lucide="sparkles" class="w-4 h-4"></i> Ruang Aman Kelas 6 MI Arifah
-            </div>
-            <h2 class="text-2xl sm:text-3xl font-extrabold leading-tight">Assalamualaikum, Sahabat! 🌱</h2>
-            <p class="text-xs sm:text-sm text-emerald-50 mt-2 leading-relaxed">
-              Pilih namamu pada daftar di bawah ini untuk mulai bercerita bersama <strong>Sobat Cerita</strong>.
-            </p>
-          </div>
-
-          <form onsubmit="handleStudentGateSubmit(event)" class="p-6 sm:p-8 space-y-5">
-            <div>
-              <div class="flex items-center justify-between mb-2">
-                <label for="selectStudentNameGate" class="block text-xs sm:text-sm font-extrabold text-slate-800">
-                  1. Pilih Nama Lengkapmu <span class="text-rose-600">*</span>
-                </label>
-                <span id="rosterCountBadge" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                  Memuat data...
-                </span>
-              </div>
-              <select id="selectStudentNameGate" required class="w-full bg-slate-50 focus:bg-white border-2 border-slate-200 focus:border-emerald-500 rounded-2xl px-4 py-3.5 text-xs sm:text-sm font-bold text-slate-900 outline-none transition shadow-sm">
-                <option value="">-- Pilih Namamu di Sini --</option>
-              </select>
-
-              <div id="emptyRosterNotice" class="hidden mt-3 p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1">
-                <p class="font-bold flex items-center gap-1.5">⚠️ Belum Ada Data Siswa Terdaftar</p>
-                <p class="text-[11px]">Wali Kelas (Bpk. Hilmy) dapat memasukkan daftar nama siswa di **Dashboard Wali Kelas** terlebih dahulu.</p>
-              </div>
-            </div>
-
-            <div>
-              <label for="selectStudentAliasGate" class="block text-xs font-extrabold text-slate-700 mb-1.5">
-                2. Pilih Gelar Rahasiamu (Nama Samaran):
-              </label>
-              <select id="selectStudentAliasGate" class="w-full bg-slate-50 border-2 border-slate-200 focus:border-emerald-500 rounded-2xl px-4 py-3 text-xs sm:text-sm font-bold text-slate-800 outline-none transition shadow-sm">
-                <option value="Penjelajah Bintang">🌟 Penjelajah Bintang</option>
-                <option value="Kapten Angkasa">🚀 Kapten Angkasa</option>
-                <option value="Pelangi Senja">🌈 Pelangi Senja</option>
-                <option value="Elang Biru">🦅 Elang Biru</option>
-                <option value="Bunga Matahari">🌻 Bunga Matahari</option>
-              </select>
-            </div>
-
-            <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-[0.99] text-white font-extrabold text-xs sm:text-sm shadow-lg transition flex items-center justify-center gap-2">
-              <span>Masuk ke Ruang Siswa</span>
-              <i data-lucide="arrow-right-circle" class="w-5 h-5"></i>
-            </button>
-          </form>
-        </div>
-      </div>
-
-      <!-- Main Student Area (After Selecting Name) -->
-      <div id="studentMainWorkspace" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
-
-        <!-- Left Column: Profile, Mood Journal, Garden Gamification -->
-        <div class="lg:col-span-5 space-y-5">
-          <!-- Student Greeting Header -->
-          <div class="bg-gradient-to-br from-emerald-600 to-teal-700 rounded-3xl p-5 sm:p-6 text-white shadow-md">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-[11px] font-bold bg-white/20 px-3 py-1 rounded-full flex items-center gap-1">
-                <i data-lucide="user-check" class="w-3.5 h-3.5"></i> Sesi Aktif
-              </span>
-              <button onclick="resetStudentSession()" class="text-xs bg-white/20 hover:bg-white/30 active:scale-95 font-bold px-3 py-1 rounded-xl transition">
-                Ganti Siswa
-              </button>
-            </div>
-            <h2 id="displayStudentGreeting" class="text-xl sm:text-2xl font-extrabold">Selamat Datang! 🌱</h2>
-            <p class="text-xs text-emerald-50 mt-1">
-              Nama Terdaftar: <strong id="displayStudentRealName" class="text-amber-300 font-bold">-</strong>
-            </p>
-          </div>
-
-          <!-- Weather Mood Check-In -->
-          <div class="bg-white rounded-3xl p-5 border border-slate-200 shadow-sm space-y-4">
-            <h3 class="font-extrabold text-slate-800 text-xs sm:text-sm flex items-center gap-2">
-              <span class="text-base">🌤️</span> Jurnal Cuaca Hatimu Hari Ini
-            </h3>
-
-            <div class="grid grid-cols-5 gap-1.5 sm:gap-2" id="moodGridContainer"></div>
-            
-            <div>
-              <label class="block text-xs font-bold text-slate-600 mb-2">Faktor Pemicu Perasaan Hari Ini:</label>
-              <div class="flex flex-wrap gap-1.5 mb-2.5" id="triggerChipsContainer"></div>
-              <input type="text" id="inputCustomTrigger" placeholder="Atau ketik pemicu lainnya..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-medium focus:outline-none focus:border-emerald-500 transition">
-            </div>
-
-            <button onclick="saveStudentMoodCheckIn()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold text-xs transition flex items-center justify-center gap-2 shadow-sm">
-              <i data-lucide="sparkles" class="w-4 h-4"></i> Simpan Jurnal Cuaca Hati (+2 Embun 💧)
-            </button>
-          </div>
-
-          <!-- Feelings Garden (Gamification) -->
-          <div class="bg-gradient-to-br from-amber-50 to-emerald-50 rounded-3xl p-5 border border-emerald-200 shadow-sm">
-            <div class="flex items-center justify-between mb-2">
-              <h4 class="font-extrabold text-xs sm:text-sm text-slate-800">🌱 Taman Perasaanmu</h4>
-              <span class="text-xs sm:text-sm font-black text-emerald-700 bg-white px-3 py-1 rounded-2xl border border-emerald-200 shadow-sm" id="displayEmbunCount">💧 10 Embun</span>
-            </div>
-            
-            <div class="w-full bg-emerald-200/60 rounded-full h-2.5 mb-3 overflow-hidden">
-              <div id="flowerProgressBar" class="bg-gradient-to-r from-emerald-500 to-teal-600 h-2.5 rounded-full transition-all duration-500" style="width: 40%"></div>
-            </div>
-
-            <div class="bg-white rounded-2xl p-4 border border-emerald-100 flex items-center justify-between shadow-xs">
-              <div class="flex items-center gap-3">
-                <span class="text-3xl sm:text-4xl animate-float" id="flowerEmoji">🌷</span>
-                <div>
-                  <span class="text-[10px] font-extrabold uppercase bg-amber-100 text-amber-800 px-2 py-0.5 rounded" id="flowerLevelBadge">Level 2 • Kuncup Ceria</span>
-                  <p class="font-extrabold text-xs text-slate-800 mt-1" id="flowerTitleName">Bunga Ketangguhan</p>
-                </div>
-              </div>
-              <button onclick="waterGarden()" class="px-3.5 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white text-xs font-bold rounded-xl shadow transition flex items-center gap-1.5">
-                <span>💧 Siram</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right Column: Story Counseling Input & AI Response -->
-        <div class="lg:col-span-7 space-y-5">
-          <div class="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200 shadow-sm space-y-4">
-            <div>
-              <h3 class="font-extrabold text-slate-900 text-base sm:text-lg flex items-center gap-2">
-                <i data-lucide="message-square-heart" class="w-5 h-5 text-emerald-600"></i>
-                Ruang Curhat Sobat Cerita
-              </h3>
-              <p class="text-xs text-slate-500 mt-0.5">Tuliskan apa saja yang mengganggu pikiranmu. AI Sobat Cerita akan mendengarkan & membalas dengan hangat.</p>
-            </div>
-
-            <form onsubmit="handleStorySubmit(event)" class="space-y-4">
-              <div>
-                <textarea id="inputStoryText" required rows="5" placeholder="Tuliskan ceritamu di sini secara bebas... (misal: 'Hari ini saya cemas menghadapi latihan matematika...')" class="w-full bg-slate-50 border-2 border-slate-200 focus:border-emerald-500 rounded-2xl p-4 text-xs sm:text-sm font-medium text-slate-800 outline-none transition resize-none"></textarea>
-              </div>
-
-              <div class="flex justify-end">
-  <button type="submit" id="btnSubmitStory" class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 active:scale-[0.99] text-white font-extrabold text-xs sm:text-sm shadow-md transition flex items-center justify-center gap-2">
-    <i data-lucide="send" class="w-4 h-4"></i> Kirim Curhatan
-  </button>
-</div>
-            </form>
-
-            <!-- AI Response Box -->
-            <div id="aiResponseContainer" class="hidden mt-6 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 space-y-3">
-              <div class="flex items-center gap-2 text-emerald-900 font-extrabold text-xs sm:text-sm border-b border-emerald-200 pb-2">
-                <i data-lucide="bot" class="w-5 h-5 text-emerald-600"></i>
-                <span>Balasan AI Sobat Cerita:</span>
-              </div>
-              <p id="aiResponseBody" class="text-xs sm:text-sm leading-relaxed text-slate-800 font-medium whitespace-pre-line"></p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- =======================================================================
-         TAB 2: DASHBOARD WALI KELAS
-    ======================================================================== -->
-    <section id="tabContent-teacher" class="hidden space-y-5 sm:space-y-6">
-
-      <!-- Sub-Bar & Action Buttons -->
-      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
-        <div>
-          <h2 class="text-base sm:text-lg font-extrabold text-slate-900">Dashboard Analitik Wali Kelas 6 MI Arifah</h2>
-          <p class="text-xs text-slate-500">Pemantauan empiris kondisi psikologis & kenyamanan belajar siswa.</p>
-        </div>
-        
-        <div class="flex flex-wrap items-center gap-2">
-          <button onclick="openRosterModal()" class="px-3.5 py-2.5 rounded-xl bg-indigo-50 hover:bg-indigo-100 active:scale-95 text-indigo-700 font-bold text-xs border border-indigo-200 flex items-center gap-1.5 transition">
-            <i data-lucide="users" class="w-4 h-4"></i> Kelola Roster
-          </button>
-          <button onclick="openManualEntryModal()" class="px-3.5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-800 font-bold text-xs border border-slate-300 flex items-center gap-1.5 transition">
-            <i data-lucide="plus" class="w-4 h-4"></i> Catatan Manual
-          </button>
-          <button onclick="exportToPDF()" class="px-3.5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 active:scale-95 text-white font-bold text-xs shadow-sm flex items-center gap-1.5 transition">
-            <i data-lucide="file-down" class="w-4 h-4"></i> Ekspor PDF
-          </button>
-          <button onclick="exportToCSV()" class="px-3.5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs shadow-sm flex items-center gap-1.5 transition">
-            <i data-lucide="download" class="w-4 h-4"></i> Ekspor CSV
-          </button>
-        </div>
-      </div>
-
-      <!-- Key Performance Metrics (KPI Cards) -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-        <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-slate-500">Total Cerita Masuk</p>
-          <h3 class="text-2xl sm:text-3xl font-black text-slate-900 mt-1" id="kpiTotalStories">0</h3>
-        </div>
-        <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-rose-500">Urgensi Tinggi (Perhatian)</p>
-          <h3 class="text-2xl sm:text-3xl font-black text-rose-600 mt-1" id="kpiHighUrgency">0</h3>
-        </div>
-        <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-emerald-600">Indeks Kenyamanan</p>
-          <h3 class="text-2xl sm:text-3xl font-black text-emerald-600 mt-1" id="kpiComfortIndex">88%</h3>
-        </div>
-        <div class="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-sm">
-          <p class="text-xs font-bold text-indigo-600">Siswa Terdaftar</p>
-          <h3 class="text-2xl sm:text-3xl font-black text-indigo-600 mt-1" id="kpiActiveStudents">0</h3>
-        </div>
-      </div>
-
-      <!-- Empirical Analytics Chart -->
-      <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <h3 class="font-extrabold text-slate-900 text-sm sm:text-base">Kurva Reduksi Beban Masalah vs Peningkatan Kenyamanan Belajar</h3>
-            <p class="text-xs text-slate-500">Visualisasi empiris tren penurunan kecemasan & peningkatan iklim belajar kondusif.</p>
-          </div>
-          <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl self-start sm:self-auto border border-slate-200">
-            <button onclick="updateChartRange('week')" id="btnChartWeek" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white shadow-sm text-slate-800">Sepekan</button>
-            <button onclick="updateChartRange('month')" id="btnChartMonth" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-800">Sebulan</button>
-            <button onclick="updateChartRange('semester')" id="btnChartSemester" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-800">Semester</button>
-          </div>
-        </div>
-
-        <div class="h-60 sm:h-80 w-full relative">
-          <canvas id="chartReductionCurve"></canvas>
-        </div>
-
-        <div class="p-4 rounded-2xl bg-indigo-50/80 border border-indigo-200 text-xs text-indigo-950 space-y-1">
-          <p class="font-extrabold text-indigo-900 flex items-center gap-1.5">
-            <i data-lucide="bar-chart-3" class="w-4 h-4 text-indigo-600"></i> Deskripsi Analisis Empiris Otomatis:
-          </p>
-          <p id="chartDescriptiveAnalysisText" class="leading-relaxed font-medium">
-            Memuat analisis empiris berdasarkan tren grafik...
-          </p>
-        </div>
-      </div>
-
-      <!-- Journal Records Table -->
-      <div class="bg-white p-5 sm:p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
-        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3">
-          <h3 class="font-extrabold text-slate-900 text-sm sm:text-base">Rekapitulasi Jurnal & Konseling Siswa</h3>
-          
-          <div class="flex flex-wrap items-center gap-2">
-            <input type="text" id="filterSearchKeyword" onkeyup="applyTableFilters()" placeholder="Cari nama/cerita..." class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-medium outline-none focus:border-indigo-500">
-
-            <select id="filterUrgencyLevel" onchange="applyTableFilters()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-bold outline-none">
-              <option value="all">Semua Urgensi</option>
-              <option value="Tinggi">Tinggi</option>
-              <option value="Sedang">Sedang</option>
-              <option value="Rendah">Rendah</option>
-            </select>
-
-            <select id="filterStudentName" onchange="applyTableFilters()" class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 text-xs font-bold outline-none">
-              <option value="all">Semua Siswa</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="overflow-x-auto -mx-5 sm:mx-0 px-5 sm:px-0">
-          <table class="w-full text-left border-collapse text-xs min-w-[650px]">
-            <thead>
-              <tr class="border-b border-slate-200 bg-slate-50 font-bold text-slate-600 whitespace-nowrap">
-                <th class="p-3">Waktu</th>
-                <th class="p-3">Nama Siswa</th>
-                <th class="p-3">Mood</th>
-                <th class="p-3">Pemicu</th>
-                <th class="p-3">Urgensi</th>
-                <th class="p-3">Rekomendasi Aksi Guru</th>
-                <th class="p-3 text-center">Aksi</th>
-                <th class="p-3 text-center">Sudah Ditindaki</th>
-              </tr>
-            </thead>
-            <tbody id="tableStoryBody" class="divide-y divide-slate-100 font-medium text-slate-800">
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- =======================================================================
-         TAB 3: PENGATURAN API AI
-    ======================================================================== -->
-    <section id="tabContent-nlp" class="hidden space-y-6">
-      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm max-w-2xl mx-auto space-y-5">
-        <div>
-          <h2 class="text-base sm:text-lg font-extrabold text-slate-900">Pengaturan Gemini AI API Key</h2>
-          <p class="text-xs text-slate-500 mt-1">Masukkan Google Gemini API Key untuk mengaktifkan balasan AI Sobat Cerita & analisis NLP otomatis.</p>
-        </div>
-
-        <div class="space-y-3">
-          <label for="inputGeminiApiKey" class="block text-xs font-bold text-slate-700">Gemini API Key:</label>
-          <input type="password" id="inputGeminiApiKey" value="AQ.Ab8RN6JEBhlp8WTWN_quCMvB6M8_fCV6AMAaEpfqhBgwsJVN_w" placeholder="AIzaSy..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-mono-code outline-none focus:border-emerald-500">
-          <div class="flex items-center gap-2 pt-2">
-            <button onclick="saveApiKey()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-2">
-              <i data-lucide="key" class="w-4 h-4"></i> Simpan API Key
-            </button>
-            <button onclick="testApiKeyConnection()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-bold text-xs rounded-xl transition flex items-center gap-2">
-              <i data-lucide="refresh-cw" class="w-4 h-4"></i> Uji Koneksi
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm max-w-2xl mx-auto space-y-5">
-        <div>
-          <h2 class="text-base sm:text-lg font-extrabold text-slate-900">Sinkronisasi Otomatis ke Email</h2>
-          <p class="text-xs text-slate-500 mt-1">Setiap ada perubahan data (cerita siswa, daftar siswa, catatan observasi, jurnal mood), cadangan dikirim otomatis ke email Anda berisi file JSON dan CSV.</p>
-        </div>
-        <div class="space-y-3">
-          <label class="block text-xs font-bold text-slate-700">Email tujuan:</label>
-          <input type="email" id="inputSyncEmail" value="muhhilmyafiqmn@gmail.com" readonly class="w-full bg-slate-100 border border-slate-200 rounded-xl p-3 text-xs font-mono-code text-slate-600 outline-none">
-          <label for="inputSyncUrl" class="block text-xs font-bold text-slate-700">URL Web App Google Apps Script:</label>
-          <input type="url" id="inputSyncUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-mono-code outline-none focus:border-emerald-500">
-          <label class="flex items-center gap-2 text-xs font-semibold text-slate-700">
-            <input type="checkbox" id="chkAutoSync" checked class="w-4 h-4 accent-emerald-600"> Kirim otomatis (2 menit setelah perubahan terakhir)
-          </label>
-          <p id="syncStatus" class="text-[11px] text-slate-500"></p>
-          <div class="flex flex-wrap items-center gap-2 pt-1">
-            <button onclick="saveSyncSettings()" class="px-4 py-2.5 bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow transition flex items-center gap-2">
-              <i data-lucide="mail-check" class="w-4 h-4"></i> Simpan Pengaturan
-            </button>
-            <button onclick="syncNow()" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-bold text-xs rounded-xl transition flex items-center gap-2">
-              <i data-lucide="send" class="w-4 h-4"></i> Kirim Sekarang
-            </button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-
-  <!-- MODAL AUTHENTICATION WALI KELAS -->
-  <div id="modalTeacherAuth" class="hidden fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-md w-full p-6 space-y-4 border border-slate-200 shadow-2xl">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center">
-            <i data-lucide="shield-check" class="w-4 h-4"></i>
-          </div>
-          <h3 class="font-extrabold text-slate-900 text-base">Akses Portal Wali Kelas</h3>
-        </div>
-        <button onclick="closeTeacherAuthModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-
-      <form onsubmit="handleTeacherAuthSubmit(event)" class="space-y-4">
-        <div>
-          <label for="inputTeacherPasscode" class="block text-xs font-bold text-slate-700 mb-1.5">Masukkan Passcode Wali Kelas:</label>
-          <input type="password" id="inputTeacherPasscode" placeholder="Default: 123456" autofocus class="w-full bg-slate-50 border-2 border-slate-200 focus:border-amber-500 rounded-2xl p-3 text-xs font-mono-code font-bold outline-none transition">
-          <p id="passcodeErrorMsg" class="hidden mt-2 text-[11px] font-bold text-rose-600 flex items-center gap-1">
-            <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i> Passcode salah! Silakan coba lagi.
-          </p>
-        </div>
-
-        <div class="flex items-center justify-between gap-2 pt-2">
-          <button type="button" onclick="quickAuthDemo()" class="text-xs text-amber-700 font-bold bg-amber-50 hover:bg-amber-100 px-3 py-2 rounded-xl transition">
-          </button>
-          <button type="submit" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 active:scale-95 text-white font-bold text-xs rounded-xl shadow transition">
-            Masuk Sekarang
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL ROSTER MANAGEMENT -->
-  <div id="modalRoster" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 border border-slate-200 shadow-2xl max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="font-extrabold text-slate-900 text-base">Kelola Roster Siswa Kelas 6 MI Arifah</h3>
-        <button onclick="closeRosterModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-
-      <div class="space-y-3">
-        <label for="inputBulkRoster" class="block text-xs font-bold text-slate-700">Input Massal Nama Siswa (1 Nama per Baris):</label>
-        <textarea id="inputBulkRoster" rows="5" placeholder="Ahmad Zaky&#10;Siti Nurhaliza&#10;Muhammad Rizky" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs font-medium outline-none focus:border-indigo-500 transition"></textarea>
-        <button onclick="saveBulkRosterSubmit()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.99] text-white font-bold text-xs rounded-xl transition">
-          Simpan Seluruh Daftar Siswa
-        </button>
-      </div>
-
-      <div class="border-t border-slate-100 pt-3">
-        <h4 class="font-bold text-xs text-slate-800 mb-2">Daftar Siswa Terdaftar:</h4>
-        <div id="rosterListContainer" class="max-h-40 overflow-y-auto divide-y divide-slate-100 text-xs"></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL OBSERVASI MANUAL -->
-  <div id="modalManualEntry" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 border border-slate-200 shadow-2xl max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="font-extrabold text-slate-900 text-base">Tambah Catatan Observasi Manual</h3>
-        <button onclick="closeManualEntryModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-
-      <form onsubmit="handleManualEntrySubmit(event)" class="space-y-3 text-xs">
-        <div>
-          <label for="selectManualStudent" class="block font-bold text-slate-700 mb-1">Pilih Siswa:</label>
-          <select id="selectManualStudent" required class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 font-bold outline-none">
-          </select>
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label for="selectManualMood" class="block font-bold text-slate-700 mb-1">Perkiraan Mood:</label>
-            <select id="selectManualMood" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2 font-bold outline-none">
-              <option value="Cerah ☀️">☀️ Cerah</option>
-              <option value="Berawan ⛅">⛅ Berawan</option>
-              <option value="Gerimis 🌧️">🌧️ Gerimis</option>
-              <option value="Badai ⛈️">⛈️ Badai</option>
-              <option value="Pelangi 🌈">🌈 Pelangi</option>
-            </select>
-          </div>
-          <div>
-            <label for="selectManualUrgency" class="block font-bold text-slate-700 mb-1">Tingkat Urgensi:</label>
-            <select id="selectManualUrgency" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2 font-bold outline-none">
-              <option value="Rendah">Rendah</option>
-              <option value="Sedang">Sedang</option>
-              <option value="Tinggi">Tinggi</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label for="inputManualStory" class="block font-bold text-slate-700 mb-1">Catatan Observasi Guru:</label>
-          <textarea id="inputManualStory" required rows="3" placeholder="Siswa terlihat pendiam saat jam istirahat..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 outline-none"></textarea>
-        </div>
-        <div>
-          <label for="inputManualRec" class="block font-bold text-slate-700 mb-1">Rekomendasi Tindakan Guru:</label>
-          <input type="text" id="inputManualRec" placeholder="Ajak ngobrol personal setelah kelas..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 outline-none">
-        </div>
-
-        <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 active:scale-[0.99] text-white font-bold rounded-xl transition">
-          Simpan Catatan Observasi
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- MODAL DETAIL CERITA -->
-  <div id="modalDetail" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white rounded-3xl max-w-xl w-full p-6 space-y-4 border border-slate-200 shadow-2xl max-h-[90vh] overflow-y-auto">
-      <div class="flex items-center justify-between border-b border-slate-100 pb-3">
-        <h3 class="font-extrabold text-slate-900 text-base" id="modalDetailTitle">Detail Jurnal Siswa</h3>
-        <button onclick="closeDetailModal()" class="text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-5 h-5"></i></button>
-      </div>
-      <div id="modalDetailBody" class="space-y-3 text-xs text-slate-800"></div>
-      <div class="border-t border-slate-100 pt-3 flex justify-between items-center">
-        <button id="btnDeleteDetailEntry" class="px-3 py-1.5 bg-rose-100 hover:bg-rose-200 text-rose-700 rounded-xl font-bold text-xs flex items-center gap-1 transition">
-          <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Hapus Entri Ini
-        </button>
-        <button onclick="closeDetailModal()" class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 rounded-xl font-bold text-xs text-slate-800">
-          Tutup
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    let appState = {
-      roster: [],
-      stories: [],
-      moods: [],
-      selectedStudent: null,
-      isTeacherLoggedIn: false,
-      pendingTab: null,
-      activeTab: 'student',
-      chartInstance: null,
-      embunCount: 10
-    };
-
-    const MOOD_OPTIONS = [
-      { id: 'Cerah ☀️', emoji: '☀️', label: 'Cerah' },
-      { id: 'Berawan ⛅', emoji: '⛅', label: 'Berawan' },
-      { id: 'Gerimis 🌧️', emoji: '🌧️', label: 'Gerimis' },
-      { id: 'Badai ⛈️', emoji: '⛈️', label: 'Badai' },
-      { id: 'Pelangi 🌈', emoji: '🌈', label: 'Pelangi' }
-    ];
-
-    const TRIGGER_TAGS = ['Pelajaran', 'Teman', 'PR', 'Keluarga', 'Nilai', 'Bullying', 'Kesehatan'];
-    let selectedMood = 'Cerah ☀️';
-    let selectedTriggers = [];
-
-    window.onload = function() {
-      lucide.createIcons();
-      initMoodGrid();
-      initTriggerChips();
-      loadAppData();
-    };
-
-    function loadAppData() {
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run
-          .withSuccessHandler(onDataLoaded)
-          .withFailureHandler(onDataError)
-          .getAppData();
-      } else {
-        const cachedRoster = localStorage.getItem('tb_roster');
-        const cachedStories = localStorage.getItem('tb_stories');
-
-        const defaultRoster = [
-          { id: 'SISWA-1', nama_siswa: 'Ahmad Zaky', alias_default: 'Penjelajah Bintang' },
-          { id: 'SISWA-2', nama_siswa: 'Siti Nurhaliza', alias_default: 'Pelangi Senja' },
-          { id: 'SISWA-3', nama_siswa: 'Muhammad Rizky', alias_default: 'Kapten Angkasa' },
-          { id: 'SISWA-4', nama_siswa: 'Anisa Rahma', alias_default: 'Bunga Matahari' }
-        ];
-
-        const defaultStories = [
-          {
-            id: 'CRT-101',
-            waktu: new Date().toISOString().slice(0, 16).replace('T', ' '),
-            nama_siswa: 'Ahmad Zaky',
-            alias: 'Penjelajah Bintang',
-            mood: 'Berawan ⛅',
-            pemicu: 'PR, Pelajaran',
-            isi_cerita: 'Saya merasa agak cemas menghadapi latihan soal matematika besok.',
-            sentimen: 'Cemas/Sedih',
-            urgensi: 'Sedang',
-            balasan_ai: 'Halo Ahmad! Cemas menghadapi ujian adalah hal yang sangat wajar. Teruslah berlatih pelan-pelan ya!',
-            rekomendasi_guru: 'Berikan pendampingan latihan soal tambahan setelah kelas.'
-          },
-          {
-            id: 'CRT-102',
-            waktu: new Date(Date.now() - 86400000).toISOString().slice(0, 16).replace('T', ' '),
-            nama_siswa: 'Siti Nurhaliza',
-            alias: 'Pelangi Senja',
-            mood: 'Pelangi 🌈',
-            pemicu: 'Teman',
-            isi_cerita: 'Hari ini saya sangat senang bisa belajar kelompok bersama teman-teman.',
-            sentimen: 'Positif',
-            urgensi: 'Rendah',
-            balasan_ai: 'MasyaAllah Siti! Indah sekali harimu. Pertahankan kebersamaan dan semangat belajarnya ya!',
-            rekomendasi_guru: 'Berikan apresiasi dan jadikan contoh keharmonisan di kelas.'
-          }
-        ];
-
-        onDataLoaded({
-          roster: cachedRoster ? JSON.parse(cachedRoster) : defaultRoster,
-          stories: cachedStories ? JSON.parse(cachedStories) : defaultStories,
-          moods: JSON.parse(localStorage.getItem('tb_moods') || '[]'),
-          hasApiKey: false
-        });
-      }
+/* Apps Script tidak mendukung preflight OPTIONS. Karena itu POST dikirim sebagai
+   "simple request" (Content-Type: text/plain) dengan isi JSON; server mem-parse sendiri. */
+async function api(action, payload = {}, opt = {}) {
+  if (!gasReady()) throw new Error('URL Google Apps Script belum diisi.');
+  const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), opt.timeout || CONFIG.TIMEOUT_MS);
+  try {
+    let res;
+    if (opt.get) {
+      const qs = new URLSearchParams({action, _: Date.now(), ...payload});
+      res = await fetch(`${CONFIG.GAS_URL}?${qs}`, {method:'GET', mode:'cors', redirect:'follow', signal:ctl.signal});
+    } else {
+      const data = {action, ...payload};
+      if (opt.teacher) data.token = S.token;
+      const body = JSON.stringify(data);
+      res = await fetch(CONFIG.GAS_URL, {method:'POST', mode:'cors', redirect:'follow', headers:{'Content-Type':'text/plain;charset=utf-8'}, body, signal:ctl.signal});
     }
+    const txt = await res.text();
+    let j;
+    try { j = JSON.parse(txt); } catch (e) { throw new Error('Respons server tidak valid. Pastikan Web App di-deploy dengan akses "Anyone".'); }
+    if (!j.ok) {
+      if (j.error === 'UNAUTHORIZED') { if (S.unlocked) lockTeacher('Sesi berakhir. Silakan masuk lagi.'); throw new Error('Tidak diizinkan'); }
+      throw new Error(j.error || 'Terjadi kesalahan');
+    }
+    return j.data;
+  } catch (e) {
+    if (e.name === 'AbortError') throw new Error('Waktu tunggu habis');
+    if (e instanceof TypeError) throw new Error('Tidak dapat terhubung ke server');
+    throw e;
+  } finally { clearTimeout(to); }
+}
 
-    function onDataLoaded(data) {
-  appState.roster = data.roster || [];
-  appState.moods = data.moods || [];
+function applyCfg(c) {
+  if (Array.isArray(c.names)) D.names = c.names;
+  if (Array.isArray(c.titles)) D.titles = c.titles;
+  if (c.roster && typeof c.roster === 'object') D.roster = c.roster;
+  if (c.piket && typeof c.piket === 'object') D.piket = c.piket;
+  if (Array.isArray(c.ann)) D.ann = c.ann;
+  D.hasKey = !!c.hasKey;
+}
+const cfgOut = () => ({names:D.names, titles:D.titles, roster:D.roster, piket:D.piket, ann:D.ann});
+const cacheCfg = () => { try { localStorage.setItem(CONFIG.CACHE_KEY, JSON.stringify({...cfgOut(), hasKey:D.hasKey})); } catch (e) {} };
+const readCache = () => { try { return JSON.parse(localStorage.getItem(CONFIG.CACHE_KEY) || 'null'); } catch (e) { return null; } };
 
-  // 1. Membaca data centang yang pernah disimpan di memori browser
-  const cachedStories = JSON.parse(localStorage.getItem('tb_stories') || '[]');
-  const rawStories = data.stories || [];
+/* Simpan konfigurasi kelas: ditunda sebentar dan diserialkan agar urutan tulis aman */
+const sv = {t:0, run:false, dirty:false, msg:''};
+function save(msg) { sv.msg = msg || sv.msg; clearTimeout(sv.t); sv.t = setTimeout(flush, 500); }
+async function flush() {
+  if (sv.run) { sv.dirty = true; return; }
+  sv.run = true;
+  try { await api('saveConfig', {config: cfgOut()}, {teacher:true}); cacheCfg(); toast(sv.msg || 'Tersimpan ✅'); }
+  catch (e) { toast('Gagal menyimpan: ' + e.message); }
+  sv.msg = ''; sv.run = false;
+  if (sv.dirty) { sv.dirty = false; flush(); }
+}
 
-  // 2. Menggabungkan data cerita dengan status centang yang sudah disimpan
-  appState.stories = rawStories.map(story => {
-    const cached = cachedStories.find(c => String(c.id) === String(story.id));
-    return {
-      ...story,
-      sudah_ditindaki: cached ? Boolean(cached.sudah_ditindaki) : Boolean(story.sudah_ditindaki)
-    };
+async function boot() {
+  S.view = 'boot'; render();
+  if (!gasReady()) { S.view = 'setup'; render(); return; }
+  try { applyCfg(await api('config', {}, {get:true})); cacheCfg(); }
+  catch (e) {
+    const c = readCache();
+    if (c) { applyCfg(c); toast('Mode offline: memakai data tersimpan terakhir.'); }
+    else { S.err = e.message; S.view = 'bootfail'; render(); return; }
+  }
+  go('login');
+}
+
+/* =====================================================================
+   4. AUDIO & SUARA
+   ===================================================================== */
+function actx() { if (!ac) try { ac = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {} if (ac && ac.state === 'suspended') ac.resume(); return ac; }
+function splash() {
+  if (S.mute) return; const c = actx(); if (!c) return;
+  const n = c.sampleRate * .12, b = c.createBuffer(1, n, c.sampleRate), d = b.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / n);
+  const s = c.createBufferSource(); s.buffer = b;
+  const f = c.createBiquadFilter(); f.type = 'bandpass'; f.frequency.value = 1400;
+  const g = c.createGain(); g.gain.value = .07;
+  s.connect(f); f.connect(g); g.connect(c.destination); s.start();
+}
+function chime() {
+  if (S.mute) return; const c = actx(); if (!c) return;
+  [523, 659, 784, 1047].forEach((f, i) => {
+    const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + i * .18;
+    o.frequency.value = f;
+    g.gain.setValueAtTime(.001, t); g.gain.exponentialRampToValueAtTime(.12, t + .05); g.gain.exponentialRampToValueAtTime(.001, t + 1.2);
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + 1.3);
   });
-
-  if (typeof google === 'undefined' || !google.script) {
-    localStorage.setItem('tb_roster', JSON.stringify(appState.roster));
-    localStorage.setItem('tb_stories', JSON.stringify(appState.stories));
-  }
-
-  updateRosterDropdowns();
-  if (appState.activeTab === 'teacher') renderTeacherDashboard();
-  showToast('Data tersinkronisasi sempurna', 'success');
+}
+function startAmb() {
+  if (S.mute || amb) return; const c = actx(); if (!c) return;
+  const g = c.createGain(); g.gain.value = .025; g.connect(c.destination);
+  const os = [196, 246.9, 293.7].map(f => { const o = c.createOscillator(); o.type = 'sine'; o.frequency.value = f; o.connect(g); o.start(); return o; });
+  amb = {os, g};
+}
+function stopAmb() { if (!amb) return; amb.os.forEach(o => { try { o.stop(); } catch (e) {} }); amb = null; }
+function tick() {
+  if (S.mute) return; const c = actx(); if (!c) return;
+  const t = c.currentTime, o = c.createOscillator(), g = c.createGain();
+  o.type = 'sine'; o.frequency.setValueAtTime(880, t); o.frequency.exponentialRampToValueAtTime(520, t + .08);
+  g.gain.setValueAtTime(.001, t); g.gain.exponentialRampToValueAtTime(.06, t + .01); g.gain.exponentialRampToValueAtTime(.001, t + .12);
+  o.connect(g); g.connect(c.destination); o.start(t); o.stop(t + .14);
+}
+const TTS = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+let VO = null;
+function pickVoice() {
+  if (!TTS) return;
+  const vs = speechSynthesis.getVoices().filter(v => /^id/i.test(String(v.lang).replace('_', '-')));
+  if (!vs.length) { VO = null; return; }
+  const sc = v => (/natural|online/i.test(v.name)?4:0) + (/google|microsoft/i.test(v.name)?2:0) + (/gadis|ardi|damayanti/i.test(v.name)?1:0) + (v.localService?0:1);
+  VO = vs.sort((a, b) => sc(b) - sc(a))[0];
+}
+if (TTS) { pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+function speak(t) {
+  if (!TTS || S.mute) return;
+  try {
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(t); u.lang = 'id-ID'; if (VO) u.voice = VO; u.rate = .92; u.pitch = 1; u.onstart = () => { wel = false; };
+    setTimeout(() => { try { speechSynthesis.speak(u); } catch (e) {} }, 60);
+  } catch (e) {}
 }
 
-    function onDataError(err) {
-      showToast('Gagal memuat data dari database', 'error');
-    }
-
-    function updateRosterDropdowns() {
-      const gateSelect = document.getElementById('selectStudentNameGate');
-      const filterSelect = document.getElementById('filterStudentName');
-      const manualSelect = document.getElementById('selectManualStudent');
-      const badge = document.getElementById('rosterCountBadge');
-
-      gateSelect.innerHTML = '<option value="">-- Pilih Namamu di Sini --</option>';
-      filterSelect.innerHTML = '<option value="all">Semua Siswa</option>';
-      manualSelect.innerHTML = '';
-
-      badge.innerText = appState.roster.length + ' Siswa Terdaftar';
-
-      if (appState.roster.length === 0) {
-        document.getElementById('emptyRosterNotice').classList.remove('hidden');
-      } else {
-        document.getElementById('emptyRosterNotice').classList.add('hidden');
-      }
-
-      appState.roster.forEach(s => {
-        const opt1 = document.createElement('option');
-        opt1.value = s.nama_siswa;
-        opt1.innerText = s.nama_siswa;
-        gateSelect.appendChild(opt1);
-
-        const opt2 = document.createElement('option');
-        opt2.value = s.nama_siswa;
-        opt2.innerText = s.nama_siswa;
-        filterSelect.appendChild(opt2);
-
-        const opt3 = document.createElement('option');
-        opt3.value = s.nama_siswa;
-        opt3.innerText = s.nama_siswa;
-        manualSelect.appendChild(opt3);
-      });
-    }
-
-    function handleStudentGateSubmit(e) {
-      e.preventDefault();
-      const name = document.getElementById('selectStudentNameGate').value;
-      const alias = document.getElementById('selectStudentAliasGate').value;
-
-      if (!name) return;
-
-      appState.selectedStudent = { name, alias };
-      document.getElementById('studentOnboardingGate').classList.add('hidden');
-      document.getElementById('studentMainWorkspace').classList.remove('hidden');
-
-      document.getElementById('displayStudentGreeting').innerText = `Assalamualaikum, ${alias}! 🌱`;
-      document.getElementById('displayStudentRealName').innerText = name;
-      updateGardenUI();
-      lucide.createIcons();
-    }
-
-    function resetStudentSession() {
-      appState.selectedStudent = null;
-      document.getElementById('studentOnboardingGate').classList.remove('hidden');
-      document.getElementById('studentMainWorkspace').classList.add('hidden');
-    }
-
-    function initMoodGrid() {
-      const container = document.getElementById('moodGridContainer');
-      container.innerHTML = '';
-      MOOD_OPTIONS.forEach(m => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.onclick = () => selectMood(m.id);
-        btn.className = `p-2 rounded-2xl border flex flex-col items-center gap-1 text-center transition ${m.id === selectedMood ? 'border-emerald-500 bg-emerald-50 text-emerald-900 font-bold shadow-sm scale-105' : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'}`;
-        btn.innerHTML = `<span class="text-xl sm:text-2xl">${m.emoji}</span><span class="text-[10px] font-bold">${m.label}</span>`;
-        container.appendChild(btn);
-      });
-    }
-
-    function selectMood(moodId) {
-      selectedMood = moodId;
-      initMoodGrid();
-    }
-
-    function initTriggerChips() {
-      const container = document.getElementById('triggerChipsContainer');
-      container.innerHTML = '';
-      TRIGGER_TAGS.forEach(t => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.onclick = () => toggleTriggerTag(t, btn);
-        btn.className = 'px-2.5 py-1 rounded-full text-[11px] font-bold border border-slate-200 bg-slate-100 text-slate-600 hover:bg-emerald-50 transition';
-        btn.innerText = t;
-        container.appendChild(btn);
-      });
-    }
-
-    function toggleTriggerTag(tag, btn) {
-      if (selectedTriggers.includes(tag)) {
-        selectedTriggers = selectedTriggers.filter(x => x !== tag);
-        btn.classList.remove('bg-emerald-600', 'text-white');
-        btn.classList.add('bg-slate-100', 'text-slate-600');
-      } else {
-        selectedTriggers.push(tag);
-        btn.classList.add('bg-emerald-600', 'text-white');
-        btn.classList.remove('bg-slate-100', 'text-slate-600');
-      }
-    }
-
-    function saveStudentMoodCheckIn() {
-      if (!appState.selectedStudent) return;
-
-      const customTrig = document.getElementById('inputCustomTrigger').value.trim();
-      const allTrig = [...selectedTriggers, customTrig].filter(Boolean).join(', ');
-
-      const payload = {
-        studentName: appState.selectedStudent.name,
-        mood: selectedMood,
-        triggers: allTrig
-      };
-
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run.submitStudentMood(payload);
-      } else {
-        appState.moods.push({
-          waktu: new Date().toISOString().slice(0, 16).replace('T', ' '),
-          nama_siswa: payload.studentName,
-          mood: payload.mood,
-          pemicu: payload.triggers
-        });
-        localStorage.setItem('tb_moods', JSON.stringify(appState.moods));
-      }
-
-      appState.embunCount += 2;
-      updateGardenUI();
-      showToast('Jurnal Cuaca Hati tersimpan! (+2 Embun 💧)', 'success');
-    }
-
-    function waterGarden() {
-      appState.embunCount += 2;
-      updateGardenUI();
-      showToast('Taman Perasaan disiram! (+2 Embun 💧)', 'success');
-    }
-
-    function updateGardenUI() {
-      const embun = appState.embunCount;
-      document.getElementById('displayEmbunCount').innerText = `💧 ${embun} Embun`;
-
-      let levelText = "Level 1 • Tunas Harapan";
-      let flowerEmoji = "🌱";
-      let titleName = "Tunas Ketangguhan";
-      let pct = Math.min((embun / 50) * 100, 100);
-
-      if (embun >= 50) {
-        levelText = "Level 4 • Bunga Abadi";
-        flowerEmoji = "🌸";
-        titleName = "Taman Bintang Ceria";
-      } else if (embun >= 25) {
-        levelText = "Level 3 • Mekar Anggun";
-        flowerEmoji = "🌻";
-        titleName = "Bunga Ketangguhan";
-      } else if (embun >= 10) {
-        levelText = "Level 2 • Kuncup Ceria";
-        flowerEmoji = "🌷";
-        titleName = "Kuncup Harapan";
-      }
-
-      document.getElementById('flowerLevelBadge').innerText = levelText;
-      document.getElementById('flowerEmoji').innerText = flowerEmoji;
-      document.getElementById('flowerTitleName').innerText = titleName;
-      document.getElementById('flowerProgressBar').style.width = pct + '%';
-    }
-
-    function handleStorySubmit(e) {
-      e.preventDefault();
-      if (!appState.selectedStudent) return;
-
-      const storyText = document.getElementById('inputStoryText').value.trim();
-      const isAnon = false;
-      const customTrig = document.getElementById('inputCustomTrigger').value.trim();
-      const allTrig = [...selectedTriggers, customTrig].filter(Boolean).join(', ');
-
-      if (!storyText) return;
-
-      const payload = {
-        studentName: isAnon ? "Siswa Rahasia" : appState.selectedStudent.name,
-        studentAlias: appState.selectedStudent.alias,
-        mood: selectedMood,
-        triggers: allTrig,
-        storyText: storyText
-      };
-
-      document.getElementById('btnSubmitStory').disabled = true;
-      document.getElementById('btnSubmitStory').innerText = "Mengirim...";
-
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run
-          .withSuccessHandler(onStorySubmitted)
-          .submitStudentStory(payload);
-      } else {
-        setTimeout(() => {
-          const newEntry = {
-            id: 'CRT-' + Date.now(),
-            waktu: new Date().toISOString().slice(0, 16).replace('T', ' '),
-            nama_siswa: payload.studentName,
-            alias: payload.studentAlias,
-            mood: payload.mood,
-            pemicu: payload.triggers,
-            isi_cerita: payload.storyText,
-            sentimen: 'Cemas/Sedih',
-            urgensi: 'Sedang',
-            balasan_ai: 'Halo Sahabat! Terima kasih sudah menceritakan perasaanmu hari ini ke Sobat Cerita. Pak Hilmy dan Sobat Cerita akan selalu mendukungmu!',
-            rekomendasi_guru: 'Berikan apresiasi dan perhatikan perkembangannya.'
-          };
-          appState.stories.unshift(newEntry);
-          localStorage.setItem('tb_stories', JSON.stringify(appState.stories));
-          onStorySubmitted({ success: true, entry: newEntry });
-        }, 600);
-      }
-    }
-
-    function onStorySubmitted(res) {
-      document.getElementById('btnSubmitStory').disabled = false;
-      document.getElementById('btnSubmitStory').innerHTML = '<i data-lucide="send" class="w-4 h-4"></i> Kirim Curhatan';
-      lucide.createIcons();
-
-      document.getElementById('inputStoryText').value = '';
-      document.getElementById('aiResponseContainer').classList.remove('hidden');
-      document.getElementById('aiResponseBody').innerText = res.entry.balasan_ai;
-
-      appState.embunCount += 5;
-      updateGardenUI();
-      showToast('Cerita tersimpan & dianalisis! (+5 Embun 💧)', 'success');
-
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        loadAppData();
-      }
-    }
-
-    function requestTeacherAuth(targetTab) {
-      if (appState.isTeacherLoggedIn) {
-        switchMainTab(targetTab);
-        return;
-      }
-      appState.pendingTab = targetTab;
-      document.getElementById('inputTeacherPasscode').value = '';
-      document.getElementById('passcodeErrorMsg').classList.add('hidden');
-      document.getElementById('modalTeacherAuth').classList.remove('hidden');
-    }
-
-    function closeTeacherAuthModal() {
-      document.getElementById('modalTeacherAuth').classList.add('hidden');
-    }
-
-    function handleTeacherAuthSubmit(e) {
-      if (e) e.preventDefault();
-      const pass = document.getElementById('inputTeacherPasscode').value;
-
-      if (pass === 'hilmy123' || pass === 'walikelas') {
-        appState.isTeacherLoggedIn = true;
-        closeTeacherAuthModal();
-        document.getElementById('teacherLockIcon').setAttribute('data-lucide', 'unlock');
-        lucide.createIcons();
-        switchMainTab(appState.pendingTab || 'teacher');
-        showToast('Berhasil masuk sebagai Wali Kelas!', 'success');
-      } else {
-        document.getElementById('passcodeErrorMsg').classList.remove('hidden');
-      }
-    }
-
-    function quickAuthDemo() {
-      document.getElementById('inputTeacherPasscode').value = 'hilmy123';
-      handleTeacherAuthSubmit();
-    }
-
-    function switchMainTab(tab) {
-      appState.activeTab = tab;
-      ['student', 'teacher', 'nlp'].forEach(t => {
-        document.getElementById(`tabContent-${t}`).classList.add('hidden');
-        document.getElementById(`tabBtn-${t}`).className = "px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap text-slate-600 hover:bg-white";
-      });
-
-      document.getElementById(`tabContent-${tab}`).classList.remove('hidden');
-      document.getElementById(`tabBtn-${tab}`).className = "px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 whitespace-nowrap bg-emerald-600 text-white shadow-sm";
-
-      if (tab === 'teacher') {
-        setTimeout(() => renderTeacherDashboard(), 50);
-      }
-      lucide.createIcons();
-    }
-
-    function renderTeacherDashboard() {
-      const stories = appState.stories;
-      document.getElementById('kpiTotalStories').innerText = stories.length;
-      document.getElementById('kpiHighUrgency').innerText = stories.filter(s => s.urgensi === 'Tinggi').length;
-      document.getElementById('kpiActiveStudents').innerText = appState.roster.length;
-
-      renderChart('week');
-      applyTableFilters();
-    }
-
-    function renderChart(range) {
-      const canvas = document.getElementById('chartReductionCurve');
-      if (!canvas) return;
-      const ctx = canvas.getContext('2d');
-      if (appState.chartInstance) appState.chartInstance.destroy();
-
-      let labels = [];
-      let problemData = [];
-      let comfortData = [];
-
-      if (range === 'week') {
-        labels = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'];
-        problemData = [65, 58, 42, 35, 28, 20, 15];
-        comfortData = [35, 45, 60, 72, 80, 88, 92];
-      } else if (range === 'month') {
-        labels = ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'];
-        problemData = [72, 54, 32, 18];
-        comfortData = [40, 62, 78, 91];
-      } else {
-        labels = ['Bulan 1', 'Bulan 2', 'Bulan 3', 'Bulan 4', 'Bulan 5', 'Bulan 6'];
-        problemData = [80, 65, 48, 32, 22, 14];
-        comfortData = [30, 48, 65, 80, 89, 95];
-      }
-
-      appState.chartInstance = new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              label: 'Beban Kecemasan Siswa (%)',
-              data: problemData,
-              borderColor: '#f43f5e',
-              backgroundColor: 'rgba(244, 63, 94, 0.1)',
-              fill: true,
-              tension: 0.4
-            },
-            {
-              label: 'Indeks Kenyamanan Belajar (%)',
-              data: comfortData,
-              borderColor: '#10b981',
-              backgroundColor: 'rgba(16, 185, 129, 0.1)',
-              fill: true,
-              tension: 0.4
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: 'bottom' } }
-        }
-      });
-
-      const textMap = {
-        week: 'Berdasarkan rekapitulasi data empiris periode Sepekan Terakhir, terjadi penurunan signifikan pada tingkat beban kecemasan siswa sebesar 76% diimbangi peningkatan indeks kenyamanan belajar hingga 92%. Hal ini menunjukkan efektivitas pendampingan empati Wali Kelas di Kelas 6 MI Arifah.',
-        month: 'Berdasarkan rekapitulasi bulanan, pendampingan konseling digital secara konsisten menekan tingkat konflik & krisis emosional siswa dari 72% menjadi 18%, serta meningkatkan iklim kondusif kelas sebesar 91%.',
-        semester: 'Evaluasi berkala selama 1 Semester membuktikan reduksi masalah psikis siswa yang stabil dari 80% ke 14% dengan tingkat kepuasan kenyamanan belajar mencapai 95%.'
-      };
-
-      document.getElementById('chartDescriptiveAnalysisText').innerText = textMap[range];
-    }
-
-    function updateChartRange(range) {
-      ['week', 'month', 'semester'].forEach(r => {
-        const btn = document.getElementById(`btnChart${r.charAt(0).toUpperCase() + r.slice(1)}`);
-        if (btn) btn.className = r === range ? 'px-3 py-1.5 rounded-lg text-xs font-bold bg-white shadow-sm text-slate-800' : 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-800';
-      });
-      renderChart(range);
-    }
-
-    function applyTableFilters() {
-      const studentFilter = document.getElementById('filterStudentName').value;
-      const urgencyFilter = document.getElementById('filterUrgencyLevel').value;
-      const searchKeyword = document.getElementById('filterSearchKeyword').value.toLowerCase().trim();
-
-      const tbody = document.getElementById('tableStoryBody');
-      tbody.innerHTML = '';
-
-      let filtered = appState.stories;
-
-      if (studentFilter !== 'all') {
-        filtered = filtered.filter(s => s.nama_siswa === studentFilter);
-      }
-
-      if (urgencyFilter !== 'all') {
-        filtered = filtered.filter(s => (s.urgensi || 'Rendah') === urgencyFilter);
-      }
-
-      if (searchKeyword) {
-        filtered = filtered.filter(s =>
-          (s.nama_siswa && s.nama_siswa.toLowerCase().includes(searchKeyword)) ||
-          (s.isi_cerita && s.isi_cerita.toLowerCase().includes(searchKeyword)) ||
-          (s.pemicu && s.pemicu.toLowerCase().includes(searchKeyword))
-        );
-      }
-
-      if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" class="p-4 text-center text-slate-400 font-medium">Tidak ada data cerita yang sesuai dengan filter.</td></tr>';
-        return;
-      }
-
-      filtered.forEach(s => {
-        const tr = document.createElement('tr');
-        tr.className = "hover:bg-slate-50 transition border-b border-slate-100";
-        tr.innerHTML = `
-          <td class="p-3 font-mono-code text-[11px] whitespace-nowrap">${s.waktu || '-'}</td>
-          <td class="p-3 font-bold whitespace-nowrap">${s.nama_siswa}</td>
-          <td class="p-3 whitespace-nowrap">${s.mood}</td>
-          <td class="p-3"><span class="px-2 py-0.5 rounded bg-slate-100 font-bold text-[11px]">${s.pemicu || '-'}</span></td>
-          <td class="p-3">
-            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold ${s.urgensi === 'Tinggi' ? 'bg-rose-100 text-rose-700 border border-rose-200' : s.urgensi === 'Sedang' ? 'bg-amber-100 text-amber-800 border border-amber-200' : 'bg-emerald-100 text-emerald-700 border border-emerald-200'}">
-              ${s.urgensi || 'Rendah'}
-            </span>
-          </td>
-          <td class="p-3 text-slate-600 max-w-xs truncate">${s.rekomendasi_guru || '-'}</td>
-          <td class="p-3 text-center whitespace-nowrap">
-            <button onclick='openDetailModal(${JSON.stringify(s).replace(/'/g, "&apos;")})' class="px-2.5 py-1 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 active:scale-95 rounded-lg font-bold text-[11px] transition">
-              Detail
-            </button>
-          </td>
-          <!-- Tambahkan kolom centang di bawah ini -->
-          <td class="p-3 text-center whitespace-nowrap">
-            <input type="checkbox" ${s.sudah_ditindaki ? 'checked' : ''} onchange="toggleActionStatus('${s.id}', this.checked)" class="w-4 h-4 text-emerald-600 rounded focus:ring-emerald-500 cursor-pointer">
-          </td>
-        `;  
-        tbody.appendChild(tr);
-      });
-    }
-
-    function openDetailModal(data) {
-      document.getElementById('modalDetailTitle').innerText = `Detail Jurnal: ${data.nama_siswa}`;
-      document.getElementById('modalDetailBody').innerHTML = `
-        <p><strong>Waktu:</strong> ${data.waktu}</p>
-        <p><strong>Mood & Pemicu:</strong> ${data.mood} (${data.pemicu || 'Tidak ada'})</p>
-        <div class="p-3 bg-slate-50 rounded-2xl border border-slate-200"><strong>Isi Cerita Siswa:</strong><br>${data.isi_cerita}</div>
-        <div class="p-3 bg-emerald-50 text-emerald-950 rounded-2xl border border-emerald-200"><strong>Balasan AI Sobat Cerita:</strong><br>${data.balasan_ai}</div>
-        <div class="p-3 bg-indigo-50 text-indigo-950 rounded-2xl border border-indigo-200"><strong>Rekomendasi Aksi Wali Kelas:</strong><br>${data.rekomendasi_guru}</div>
-      `;
-
-      document.getElementById('btnDeleteDetailEntry').onclick = () => deleteStoryEntry(data.id);
-      document.getElementById('modalDetail').classList.remove('hidden');
-      lucide.createIcons();
-    }
-
-    function closeDetailModal() {
-      document.getElementById('modalDetail').classList.add('hidden');
-    }
-
-    function deleteStoryEntry(id) {
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run.withSuccessHandler(res => {
-          onDataLoaded(res);
-          closeDetailModal();
-        }).deleteStoryEntry(id);
-      } else {
-        appState.stories = appState.stories.filter(s => s.id !== id);
-        localStorage.setItem('tb_stories', JSON.stringify(appState.stories));
-        renderTeacherDashboard();
-        closeDetailModal();
-        showToast('Entri berhasil dihapus', 'success');
-      }
-    }
-
-    function openRosterModal() {
-      const container = document.getElementById('rosterListContainer');
-      container.innerHTML = '';
-      appState.roster.forEach(r => {
-        const div = document.createElement('div');
-        div.className = "py-2 flex items-center justify-between";
-        div.innerHTML = `
-          <span><strong>${r.nama_siswa}</strong></span>
-          <button onclick="deleteRosterItem('${r.id}')" class="text-rose-600 font-bold hover:underline text-[11px]">Hapus</button>
-        `;
-        container.appendChild(div);
-      });
-      document.getElementById('modalRoster').classList.remove('hidden');
-    }
-
-    function closeRosterModal() {
-      document.getElementById('modalRoster').classList.add('hidden');
-    }
-
-    function saveBulkRosterSubmit() {
-      const text = document.getElementById('inputBulkRoster').value;
-      if (!text.trim()) return;
-
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run
-          .withSuccessHandler((res) => {
-            onDataLoaded(res.data);
-            closeRosterModal();
-          })
-          .saveBulkRoster(text);
-      } else {
-        const lines = text.split('\n').filter(l => l.trim().length > 0);
-        appState.roster = lines.map((name, i) => ({ id: 'SISWA-' + (Date.now() + i), nama_siswa: name.trim(), alias_default: 'Penjelajah Bintang' }));
-        localStorage.setItem('tb_roster', JSON.stringify(appState.roster));
-        updateRosterDropdowns();
-        closeRosterModal();
-        showToast('Daftar siswa berhasil diperbarui', 'success');
-      }
-    }
-
-    function deleteRosterItem(id) {
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run.withSuccessHandler(onDataLoaded).deleteStudentRoster(id);
-      } else {
-        appState.roster = appState.roster.filter(r => r.id !== id);
-        localStorage.setItem('tb_roster', JSON.stringify(appState.roster));
-        updateRosterDropdowns();
-        openRosterModal();
-        showToast('Siswa dihapus dari daftar', 'success');
-      }
-    }
-
-    function openManualEntryModal() {
-      document.getElementById('modalManualEntry').classList.remove('hidden');
-    }
-
-    function closeManualEntryModal() {
-      document.getElementById('modalManualEntry').classList.add('hidden');
-    }
-
-    function handleManualEntrySubmit(e) {
-      e.preventDefault();
-      const payload = {
-        studentName: document.getElementById('selectManualStudent').value,
-        mood: document.getElementById('selectManualMood').value,
-        urgency: document.getElementById('selectManualUrgency').value,
-        storyText: document.getElementById('inputManualStory').value,
-        teacherRecommendation: document.getElementById('inputManualRec').value
-      };
-
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run.withSuccessHandler(res => {
-          onDataLoaded(res);
-          closeManualEntryModal();
-        }).addTeacherManualEntry(payload);
-      } else {
-        appState.stories.unshift({
-          id: 'MNL-' + Date.now(),
-          waktu: new Date().toISOString().slice(0, 16).replace('T', ' '),
-          nama_siswa: payload.studentName,
-          mood: payload.mood,
-          pemicu: 'Observasi Guru',
-          urgensi: payload.urgency,
-          isi_cerita: payload.storyText,
-          rekomendasi_guru: payload.teacherRecommendation,
-          balasan_ai: 'Pencatatan manual oleh Wali Kelas'
-        });
-        localStorage.setItem('tb_stories', JSON.stringify(appState.stories));
-        renderTeacherDashboard();
-        closeManualEntryModal();
-        showToast('Catatan observasi manual tersimpan', 'success');
-      }
-    }
-
-    function saveApiKey() {
-      const key = document.getElementById('inputGeminiApiKey').value;
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        google.script.run.withSuccessHandler(() => showToast('Gemini API Key tersimpan!', 'success')).saveGeminiApiKey(key);
-      } else {
-        showToast('Gemini API Key tersimpan di mode lokal', 'success');
-      }
-    }
-
-    function testApiKeyConnection() {
-      showToast('Koneksi AI aktif & siap digunakan!', 'success');
-    }
-
-    function exportToPDF() {
-      const element = document.getElementById('tabContent-teacher');
-      html2pdf().from(element).save('Laporan_Konseling_Kelas_6_MI_Arifah.pdf');
-    }
-
-    function exportToCSV() {
-      let csv = 'Waktu,Nama Siswa,Mood,Pemicu,Urgensi,Rekomendasi Guru\n';
-      appState.stories.forEach(s => {
-        csv += `"${s.waktu}","${s.nama_siswa}","${s.mood}","${s.pemicu}","${s.urgensi}","${s.rekomendasi_guru}"\n`;
-      });
-      const blob = new Blob([csv], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.setAttribute('href', url);
-      a.setAttribute('download', 'Laporan_Konseling_Kelas_6.csv');
-      a.click();
-    }
-
-    function toggleCamouflage(show) {
-      document.getElementById('camouflageOverlay').classList.toggle('hidden', !show);
-    }
-
-    function showToast(msg, type = 'info') {
-      const container = document.getElementById('toastContainer');
-      const toast = document.createElement('div');
-      toast.className = `p-3 rounded-2xl text-xs font-bold text-white shadow-lg transition duration-300 pointer-events-auto flex items-center gap-2 ${type === 'success' ? 'bg-emerald-600' : type === 'error' ? 'bg-rose-600' : 'bg-slate-800'}`;
-      toast.innerText = msg;
-      container.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
-    function toggleActionStatus(id, isChecked) {
-  const story = appState.stories.find(s => String(s.id) === String(id));
-  if (story) {
-    story.sudah_ditindaki = isChecked;
-    localStorage.setItem('tb_stories', JSON.stringify(appState.stories));
+/* =====================================================================
+   5. TAMPILAN (VIEWS)
+   ===================================================================== */
+const go = v => { S.view = v; render(); scrollTo({top:0}); };
+const logoImg = cls => `<img class="app-logo ${cls}" src="logo.png" alt="Logo SOBAT MURID">`;
+
+function head() {
+  const bare = ['boot','setup','bootfail'].includes(S.view);
+  const g = S.view === 'guru' && S.unlocked, m = S.me && S.view !== 'welcome' && S.view !== 'login';
+  const nav = bare ? '' : `<div style="display:flex;gap:8px;flex-wrap:wrap">
+    <button class="btn gh sm" data-a="mute">${S.mute ? '🔇 Suara mati' : '🔊 Suara'}</button>
+    ${g ? '<button class="btn gh sm" data-a="lock">Keluar</button>' : ''}
+    ${S.unlocked && S.view !== 'guru' ? '<button class="btn gh sm" data-a="go" data-v="guru">Panel Guru</button>' : ''}
+    ${!S.unlocked ? '<button class="btn sm" data-a="tlogin" aria-label="Area Wali Kelas">🔐 Wali Kelas</button>' : ''}
+    ${m ? '<button class="btn gh sm" data-a="out">Ganti Identitas</button>' : ''}</div>`;
+  return `<header><button class="brand" data-a="go" data-v="login"><img id="app-logo" class="app-logo" src="logo.png" alt="Logo SOBAT MURID"><span><b>SOBAT MURID</b><small>Madrasah Modern</small></span></button>${nav}</header>`;
+}
+function greetTime() { const h = new Date().getHours(); return h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam'; }
+
+const V = {
+  boot: () => `<section class="glass hero"><div class="spin" aria-hidden="true"></div><p class="mu">Menghubungkan ke server…</p></section>`,
+  bootfail: () => `<section class="glass hero"><h2>Tidak dapat terhubung</h2><p class="mu" style="margin:8px 0 16px">${esc(S.err)}. Periksa koneksi internet dan URL Google Apps Script.</p><button class="btn" data-a="retry">Coba lagi</button></section>`,
+  setup: () => `<section class="glass hero" style="text-align:left"><h2>Hubungkan ke Google Apps Script</h2>
+    <p class="mu" style="margin:8px 0">Buka <code>index.html</code>, lalu isi <code>CONFIG.GAS_URL</code> dengan URL Web App (berakhiran <code>/exec</code>) dari deployment Apps Script Anda. Panduan pemasangan ada di komentar awal <code>Code.gs</code>.</p></section>`,
+  welcome: () => `<section class="glass hero">${logoImg('hero-logo')}<div class="ar">السلام عليكم ورحمة الله</div><h2>Assalamu’alaikum, Sobat Murid!</h2><p class="mu">Selamat datang di ruang aman madrasahmu. Silakan masuk sesuai perananmu.</p><div style="display:grid;gap:10px;margin-top:20px"><button class="btn em" data-a="go" data-v="login">🎒 Masuk sebagai Murid</button><button class="btn gh" data-a="tlogin">🔐 Area Wali Kelas</button></div></section>`,
+  login: () => `<section class="glass hero">${logoImg('hero-logo')}<div class="ar">بسم الله</div><h2>Assalamu’alaikum, Murid Hebat</h2><p class="mu">Pilih <b>Nama</b> dan <b>Gelar Rahasia</b>-mu dari daftar di bawah ini.</p>${D.names.length && D.titles.length ? `<form data-f="login"><label for="sn">Nama</label><select id="sn">${D.names.map(n => `<option>${esc(n)}</option>`).join('')}</select><label for="st">Gelar Rahasia</label><select id="st">${D.titles.map(n => `<option>${esc(n)}</option>`).join('')}</select><button class="btn" style="width:100%;margin-top:18px">Masuk</button></form>` : `<div class="empty">Wali Kelas belum mengisi daftar Nama dan Gelar Rahasia.</div>`}</section>`,
+  dash() {
+    const d = today(), r = (D.roster[d] || '').split('\n').map(s => s.trim()).filter(Boolean), pk = D.piket[d] || [], m = S.mood;
+    return `<div class="glass card" style="text-align:center"><div class="ar" style="font-size:24px">السلام عليكم</div><h2>${greetTime()}, ${esc(S.me.name)} ${esc(S.me.title)}! 🌙</h2><p class="mu">Semoga harimu penuh berkah. Hari ini ${DAYS[d]}, ${new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}.</p><div class="chips" style="justify-content:center;margin-top:8px"><span class="chip">Nama: ${esc(S.me.name)}</span><span class="chip">Gelar Rahasia: ${esc(S.me.title)}</span></div></div>
+    ${D.ann.length ? `<div class="glass card"><h3>📢 Pengumuman Kelas</h3>${D.ann.slice().reverse().slice(0,5).map(a => `<div class="ann">${esc(a.x)}<div class="mu" style="font-size:12px">${fmt(a.t)}</div></div>`).join('')}</div>` : ''}
+    <div class="two"><div class="glass card"><h3>📖 Roster Pelajaran ${DAYS[d]}</h3>${d === 0 ? '<p class="mu">Hari Minggu libur. Selamat beristirahat!</p>' : r.length ? `<ul class="l">${r.map(x => `<li><span>${esc(x)}</span></li>`).join('')}</ul>` : '<p class="mu">Jadwal hari ini belum diisi Wali Kelas.</p>'}</div>
+    <div class="glass card"><h3>🧹 Jadwal Piket Hari Ini</h3>${pk.length ? `<div class="chips">${pk.map(x => `<span class="chip">${esc(x)}</span>`).join('')}</div>` : '<p class="mu">Belum ada murid yang bertugas piket hari ini.</p>'}</div></div>
+    <div class="glass card"><h3>🌤️ Cuaca Hati Hari Ini</h3><p class="mu">Bagaimana perasaanmu sekarang?</p><div class="grid">${W.map(w => `<button class="opt ${m.w === w.k ? 'on' : ''}" data-a="mw" data-k="${w.k}"><span>${w.e}</span>${w.k}</button>`).join('')}</div>
+    <h3 style="margin-top:12px">💭 Pemicu Perasaan</h3><div class="grid">${T.map(t => `<button class="opt ${m.g === t.k ? 'on' : ''}" data-a="mg" data-k="${t.k}"><span>${t.e}</span>${t.k}</button>`).join('')}</div>
+    <label for="mm">Tulis sendiri penyebab perasaanmu (opsional)</label><textarea id="mm" data-i="man" maxlength="300" placeholder="Contoh: aku lupa membawa buku PR...">${esc(m.m)}</textarea>
+    <button class="btn" style="width:100%;margin-top:14px" data-a="savej" ${S.saved || S.saving ? 'disabled' : ''}>${S.saving ? 'Menyimpan…' : S.saved ? '✅ Jurnal tersimpan' : 'Simpan Jurnal'}</button></div>
+    <div class="two"><div class="glass card"><h3>🌱 Menyiram Tanaman</h3><p class="mu">Tenangkan hati dulu dengan menyiram tanaman.</p><button class="btn em" style="margin-top:10px" data-a="go" data-v="game" ${S.saved ? '' : 'disabled'}>Mulai Bermain</button></div><div class="glass card"><h3>💬 SOBAT MURID</h3><p class="mu">Teman bercerita yang mendengarkan tanpa menghakimi.</p><button class="btn" style="margin-top:10px" data-a="chatgo" ${S.saved ? '' : 'disabled'}>Mulai Bercerita</button></div></div>${S.saved ? '' : '<p class="mu" style="text-align:center">Simpan jurnalmu dulu untuk membuka game dan bercerita.</p>'}`;
+  },
+  game: () => `<section class="glass card"><h3>🌱 Menyiram Tanaman</h3><p class="mu">Tahan tombol Siram, tarik napas pelan, dan lihat tanamanmu tumbuh.</p><div class="stage"><svg id="pl" class="plant" viewBox="0 0 200 240"><path d="M60 190h80l-10 40H70z" fill="#b5651d"/><rect x="55" y="182" width="90" height="14" rx="6" fill="#d98a3d"/><g id="ps"></g></svg><div id="canw"><span id="can">🚿</span></div><div class="pb"><i id="pbar"></i></div><p id="pt" class="mu"></p><button class="btn em" id="sibtn" style="width:100%;touch-action:none;user-select:none" data-a="water">💧 Tahan untuk Menyiram</button></div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn gh" style="flex:1" data-a="go" data-v="dash">← Dashboard</button><button class="btn" style="flex:1" data-a="chatgo">Lanjut Bercerita 💬</button></div></section>`,
+  chat: () => `<section class="glass chat"><div id="msgs" aria-live="polite"></div><form class="cf" data-f="chat"><input id="ci" maxlength="500" placeholder="Tulis ceritamu di sini..." autocomplete="off"><button class="btn">Kirim</button></form></section><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button class="btn gh sm" data-a="endchat" data-k="dash">← Kembali ke Dashboard</button><button class="btn dn sm" data-a="endchat" data-k="out">Keluar</button></div>`,
+  guru() {
+    if (!S.unlocked) return '';
+    const crit = S.logs.filter(l => urgOf(l) === 'mendesak' && !l.done).length;
+    const tabs = [['ringkas','📊 Ringkasan'],['murid','👥 Murid'],['jadwal','🗓️ Jadwal & Piket'],['riwayat','📋 Riwayat' + (crit ? `<span class="cnt" title="${crit} mendesak belum ditindaki">${crit}</span>` : '')],['info','📢 Pengumuman'],['ai','🤖 Pengaturan AI']];
+    return `<h2 style="margin:6px 0">Area Wali Kelas</h2><div class="tabs">${tabs.map(t => `<button class="btn sm ${S.tab === t[0] ? '' : 'gh'}" data-a="tab" data-k="${t[0]}">${t[1]}</button>`).join('')}</div>${S.logsLoading ? '<p class="mu" style="margin-bottom:10px">Memuat data dari Google Sheets…</p>' : ''}${G[S.tab]()}`;
   }
+};
+
+/* ---- Panel Wali Kelas ---- */
+const cnt = (a, k, ks) => { const o = {}; ks.forEach(x => o[x] = 0); a.forEach(l => { o[l[k]] = (o[l[k]] || 0) + 1; }); return o; };
+const opts = (list, cur) => list.map(([v, l]) => `<option value="${v}" ${cur === v ? 'selected' : ''}>${l}</option>`).join('');
+
+function fl() {
+  const q = S.q.trim().toLowerCase();
+  const L = S.logs.filter(l =>
+    (S.flt === 'all' || (S.flt === 'done') === !!l.done) &&
+    (S.urg === 'all' || urgOf(l) === S.urg) &&
+    (!q || [l.name, l.title, l.w, l.g, l.m, (l.chat || []).map(x => x.t).join(' ')].join(' ').toLowerCase().includes(q)));
+  L.sort(S.sort === 'urg' ? (a, b) => URG[urgOf(b)].n - URG[urgOf(a)].n || (!!a.done - !!b.done) || b.t - a.t : (a, b) => b.t - a.t);
+  return L;
+}
+function rlist() {
+  if (!S.logs.length) return `<div class="empty">${S.logsLoading ? 'Memuat…' : 'Belum ada riwayat curhat.'}</div>`;
+  const L = fl();
+  if (!L.length) return '<div class="empty">Tidak ada data yang cocok dengan filter.</div>';
+  return `<table class="rt"><thead><tr><th>Tanggal</th><th>Murid</th><th>Urgensi</th><th>Cuaca Hati</th><th>Pemicu</th><th>Catatan</th><th>Chat</th><th>Ditindaki</th><th>Aksi</th></tr></thead><tbody>${L.map(l => {
+    const u = urgOf(l), n = (l.chat || []).length;
+    return `<tr class="${u === 'mendesak' && !l.done ? 'crit' : ''}"><td>${fmt(l.t)}</td><td>${esc(l.name)} ${esc(l.title)}</td><td>${badge(u)}</td><td>${wOf(l.w).e} ${esc(l.w)}</td><td>${esc(l.g)}</td><td><div class="clamp">${esc(l.m) || '-'}</div></td><td>${n ? n + ' pesan' : '-'}</td><td><input type="checkbox" data-c="done" data-id="${l.id}" ${l.done ? 'checked' : ''} aria-label="Sudah ditindaki"></td><td><div class="acts"><button class="btn sm" data-a="view" data-id="${l.id}">Baca</button><button class="btn sm dn" data-a="dellog" data-id="${l.id}" aria-label="Hapus riwayat">🗑️</button></div></td></tr>`;
+  }).join('')}</tbody></table>`;
 }
 
-  // =====================================================================
-  // SINKRONISASI OTOMATIS KE EMAIL (via Google Apps Script Web App)
-  // =====================================================================
-  const SYNC_EMAIL = 'muhhilmyafiqmn@gmail.com';
-  const SYNC_DELAY_MS = 2 * 60 * 1000;
-  const SYNC_KEYS = ['tb_roster', 'tb_stories', 'tb_moods'];
-  let syncTimer = null;
-  let syncBusy = false;
+const G = {
+  ringkas() {
+    const L = S.logs, n = L.length, wc = cnt(L, 'w', W.map(w => w.k)), gc = cnt(L, 'g', T.map(t => t.k));
+    const open = L.filter(l => !l.done).length, crit = L.filter(l => urgOf(l) === 'mendesak' && !l.done).length;
+    const top = W.slice().sort((a, b) => wc[b.k] - wc[a.k])[0];
+    const days = [...Array(7)].map((_, i) => { const d = new Date(); d.setDate(d.getDate() - 6 + i); return d; });
+    const key = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    const cols = days.map(d => ({l:`${d.getDate()}/${d.getMonth()+1}`, ls:L.filter(l => fmt(l.t).slice(0, 10) === key(d))}));
+    const mx = Math.max(1, ...cols.map(c => c.ls.length));
+    const row = (k, v, c) => `<div class="row"><span>${k}</span><div class="pb"><i style="width:${n ? v / n * 100 : 0}%;background:${c || ''}"></i></div><b>${v}</b></div>`;
+    return `${crit ? `<div class="glass card alert"><div><b>⚠️ ${crit} laporan Mendesak belum ditindaki</b><div class="mu">Prioritaskan murid yang membutuhkan perhatian segera.</div></div><button class="btn sm" data-a="critgo">Lihat laporan</button></div>` : ''}
+    <div class="stats"><div class="glass stat">Total Jurnal<b>${n}</b></div><div class="glass stat">Belum Ditindaki<b>${open}</b></div><div class="glass stat">Mendesak Belum Ditindaki<b>${crit}</b></div><div class="glass stat">Jumlah Murid<b>${D.names.length}</b></div><div class="glass stat">Cuaca Dominan<b>${n ? top.e + ' ' + top.k : '-'}</b></div></div>
+    <div class="glass card"><h3>Tren Mood Kelas (7 Hari)</h3><div class="bars">${cols.map(c => `<div class="col"><div class="sw"><div class="stack" style="height:${c.ls.length / mx * 100}%">${W.map(w => { const x = c.ls.filter(l => l.w === w.k).length; return x ? `<div style="flex:${x};background:${w.c}" title="${w.k}: ${x}"></div>` : ''; }).join('')}</div></div><span>${c.l}</span></div>`).join('')}</div><div class="leg">${W.map(w => `<span><i style="background:${w.c}"></i>${w.k}</span>`).join('')}</div></div>
+    <div class="two"><div class="glass card"><h3>Cuaca Hati</h3>${W.map(w => row(w.e + ' ' + w.k, wc[w.k], w.c)).join('')}</div><div class="glass card"><h3>Pemicu Perasaan</h3>${T.map(t => row(t.e + ' ' + t.k, gc[t.k])).join('')}</div></div>`;
+  },
+  murid: () => `<div class="glass card"><h3>Input Massal</h3><p class="mu">Satu entri per baris. Contoh format "Nama, Gelar": <i>Bintang, Si Pemberani</i></p><label for="bm">Mode</label><select id="bm"><option value="p">Nama, Gelar (per baris)</option><option value="n">Hanya Nama (baris/koma)</option><option value="t">Hanya Gelar (baris/koma)</option></select><label for="bt">Daftar</label><textarea id="bt" placeholder="Bintang, Si Pemberani&#10;Pelita, Si Penyabar"></textarea><button class="btn" style="margin-top:10px" data-a="bulk">Impor</button></div>
+    <div class="two">${[['names','Nama'],['titles','Gelar Rahasia']].map(([k, l]) => `<div class="glass card"><h3>${l} (${D[k].length})</h3><ul class="l">${D[k].map((x, i) => `<li><span>${esc(x)}</span><button class="ib" aria-label="Edit" data-a="ed" data-k="${k}" data-i="${i}">✏️</button><button class="ib" aria-label="Hapus" data-a="dl" data-k="${k}" data-i="${i}">🗑️</button></li>`).join('') || '<li class="mu">Belum ada data</li>'}</ul><form class="add" data-f="add" data-k="${k}"><input maxlength="30" placeholder="Tambah ${l}" aria-label="Tambah ${l}"><button class="btn sm">＋</button></form></div>`).join('')}</div>`,
+  jadwal: () => `<p class="mu" style="margin-bottom:10px">Perubahan tersimpan otomatis ke Google Sheets. Roster: satu pelajaran per baris (mis. "07.30 – Matematika").</p><div class="two">${SCH.map(d => `<div class="glass card"><h3>${DAYS[d]}</h3><label>Roster Pelajaran</label><textarea data-c="ros" data-d="${d}">${esc(D.roster[d] || '')}</textarea><label>Piket Kebersihan</label><div class="chips">${D.names.map(n => `<button type="button" class="chip ${(D.piket[d] || []).includes(n) ? 'on' : ''}" data-a="pk" data-d="${d}" data-n="${esc(n)}">${esc(n)}</button>`).join('') || '<span class="mu">Tambahkan nama murid dulu</span>'}</div></div>`).join('')}</div>`,
+  riwayat() {
+    const cu = u => S.logs.filter(l => urgOf(l) === u).length;
+    const chips = [['all','Semua',S.logs.length], ['mendesak','Mendesak',cu('mendesak')], ['sedang','Sedang',cu('sedang')], ['rendah','Rendah',cu('rendah')]];
+    return `<div class="glass card"><div class="bar">
+      <input type="search" data-i="q" value="${esc(S.q)}" placeholder="Cari nama, catatan, atau isi chat…" aria-label="Cari riwayat">
+      <select data-c="flt" aria-label="Filter status">${opts([['all','Semua Status'],['open','Belum Ditindaki'],['done','Sudah Ditindaki']], S.flt)}</select>
+      <select data-c="sort" aria-label="Urutan">${opts([['urg','Urutkan: Urgensi'],['new','Urutkan: Terbaru']], S.sort)}</select>
+      <button class="btn gh sm" data-a="reload">↻ Muat ulang</button><button class="btn sm" data-a="xls">⬇ Excel</button><button class="btn sm" data-a="pdf">⬇ PDF</button></div>
+      <div class="chips" style="margin-top:12px" role="group" aria-label="Filter tingkat urgensi">${chips.map(([k, l, n]) => `<button class="chip urg-${k} ${S.urg === k ? 'on' : ''}" data-a="urg" data-k="${k}" aria-pressed="${S.urg === k}">${l} <b>${n}</b></button>`).join('')}</div></div>
+      <div class="glass card"><div class="tw" id="rlist">${rlist()}</div></div>`;
+  },
+  info: () => `<div class="glass card"><h3>Buat Pengumuman</h3><form data-f="ann"><textarea id="an" maxlength="400" placeholder="Tulis pengumuman untuk murid..."></textarea><button class="btn" style="margin-top:10px">Terbitkan</button></form></div><div class="glass card"><h3>Daftar Pengumuman</h3>${D.ann.slice().reverse().map(a => `<div class="ann" style="display:flex;gap:8px"><span style="flex:1">${esc(a.x)}<div class="mu" style="font-size:12px">${fmt(a.t)}</div></span><button class="ib" data-a="da" data-id="${a.id}" aria-label="Hapus">🗑️</button></div>`).join('') || '<div class="empty">Belum ada pengumuman.</div>'}</div>`,
+  ai: () => `<div class="glass card"><h3>Pengaturan AI</h3><p class="mu">Masukkan API Key Gemini agar SOBAT MURID dapat menjawab. Key disimpan di Google Apps Script milik Anda dan tidak pernah dikirim ke peramban murid. Status: <b>${D.hasKey ? 'Tersimpan ✅' : 'Belum diisi'}</b></p><form data-f="key"><label for="ak">API Key</label><input id="ak" type="password" autocomplete="off" placeholder="${D.hasKey ? '•••••••• (isi untuk mengganti)' : 'Tempel API Key'}"><div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn">Simpan</button><button type="button" class="btn gh" data-a="test">Uji Koneksi</button>${D.hasKey ? '<button type="button" class="btn dn" data-a="delkey">Hapus Key</button>' : ''}</div></form><p id="tr" class="mu" style="margin-top:10px"></p></div>`
+};
 
-  const _rawSetItem = Storage.prototype.setItem;
-  Storage.prototype.setItem = function (k, v) {
-    const old = this.getItem(k);
-    _rawSetItem.call(this, k, v);
-    if (this === localStorage && SYNC_KEYS.includes(k) && old !== v) markSyncDirty();
-  };
+function render() {
+  stopAmb(); clearInterval(hold); hold = null;
+  const v = S.view;
+  if ((v === 'dash' || v === 'game' || v === 'chat') && !S.me) S.view = 'login';
+  else if ((v === 'game' || v === 'chat') && !S.saved) S.view = 'dash';
+  if (S.view === 'guru' && !S.unlocked) S.view = 'login';
+  const b = (typeof V[S.view] === 'function' ? V[S.view] : V.welcome)();
+  $('#app').innerHTML = `<main class="in">${head()}${b}</main>`;
+  if (S.view === 'game') { paintPlant(); startAmb(); }
+  if (S.view === 'chat') paintMsgs();
+}
 
-  function syncUrl() { return (localStorage.getItem('tb_sync_url') || '').trim(); }
-  function syncAuto() { return localStorage.getItem('tb_sync_auto') !== '0'; }
+/* =====================================================================
+   6. MODAL
+   ===================================================================== */
+function modal(h, wide) {
+  $('#modal').innerHTML = h ? `<div class="ov" data-a="ovc"><div class="glass ${wide ? 'wide' : ''}" role="dialog" aria-modal="true" tabindex="-1">${h}</div></div>` : '';
+  if (h) { const i = $('#modal input'); setTimeout(() => (i || $('#modal [role=dialog]')).focus(), 50); }
+}
+function ask(t, v, fn) {
+  cb = fn;
+  modal(`<h3>${t}</h3><form data-f="ask" style="margin-top:12px"><input maxlength="30" value="${esc(v)}" aria-label="${t}"><div style="display:flex;gap:8px;margin-top:16px"><button type="button" class="btn gh" style="flex:1" data-a="close">Batal</button><button class="btn" style="flex:1">Simpan</button></div></form>`);
+}
+function cfm(t, fn, desc) {
+  cb = fn;
+  modal(`<h3>${t}</h3>${desc ? `<p class="mu" style="margin-top:6px">${desc}</p>` : ''}<div style="display:flex;gap:8px;margin-top:16px"><button class="btn gh" style="flex:1" data-a="close">Batal</button><button class="btn dn" style="flex:1" data-a="yes">Hapus</button></div>`);
+}
 
-  function markSyncDirty() {
-    _rawSetItem.call(localStorage, 'tb_sync_dirty', '1');
-    scheduleSync();
-    updateSyncStatus();
+/* ---- Login Wali Kelas (verifikasi di server) ---- */
+function tlogin() {
+  modal(`<h3>🔐 Area Wali Kelas</h3><p class="mu">Masukkan kata sandi.</p><form data-f="pw" style="margin-top:12px"><input id="pw" type="password" autocomplete="current-password" aria-label="Kata sandi"><div class="err" id="pe" role="alert"></div><div style="display:flex;gap:8px;margin-top:8px"><button type="button" class="btn gh" style="flex:1" data-a="close">Batal</button><button class="btn" style="flex:1">Masuk</button></div></form>`);
+}
+async function sha(s) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
+async function checkPw() {
+  const e = $('#pe');
+  if (Date.now() < S.until) { e.textContent = `Terlalu banyak percobaan. Tunggu ${Math.ceil((S.until - Date.now()) / 1000)} detik.`; return; }
+  let h;
+  try { h = await sha($('#pw').value); } catch (x) { e.textContent = 'Peramban tidak mendukung enkripsi. Buka lewat HTTPS.'; return; }
+  e.textContent = 'Memeriksa…';
+  try {
+    await api('verify', {token:h});
+    S.unlocked = true; S.token = h; S.tries = 0; modal(''); S.tab = 'ringkas'; go('guru'); loadLogs();
+  } catch (x) {
+    if (x.message === 'Tidak diizinkan') { if (++S.tries >= 5) { S.until = Date.now() + 30000; S.tries = 0; } e.textContent = 'Kata sandi salah.'; }
+    else e.textContent = x.message;
   }
+}
+function lockTeacher(msg) { S.unlocked = false; S.token = ''; S.logs = []; modal(''); if (msg) toast(msg); go('login'); }
 
-  function scheduleSync() {
-    if (!syncAuto() || !syncUrl()) return;
-    clearTimeout(syncTimer);
-    syncTimer = setTimeout(() => sendBackup(false), SYNC_DELAY_MS);
-  }
-
-  function csvCell(v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; }
-
-  function buildSnapshot() {
-    const head = ['Waktu', 'Nama Siswa', 'Mood', 'Pemicu', 'Urgensi', 'Sentimen', 'Isi Cerita', 'Rekomendasi Guru', 'Sudah Ditindaki'];
-    const rows = appState.stories.map(s => [
-      s.waktu, s.nama_siswa, s.mood, s.pemicu, s.urgensi, s.sentimen,
-      s.isi_cerita, s.rekomendasi_guru, s.sudah_ditindaki ? 'Ya' : 'Belum'
-    ].map(csvCell).join(','));
-    return {
-      email: SYNC_EMAIL,
-      waktu_backup: new Date().toISOString(),
-      jumlah_siswa: appState.roster.length,
-      jumlah_cerita: appState.stories.length,
-      roster: appState.roster,
-      stories: appState.stories,
-      moods: appState.moods,
-      csv: head.map(csvCell).join(',') + '\n' + rows.join('\n')
-    };
-  }
-
-  async function sendBackup(manual) {
-    const url = syncUrl();
-    if (!url) {
-      if (manual) showToast('Isi URL Web App Apps Script dulu di tab Pengaturan', 'error');
-      return false;
-    }
-    if (syncBusy) return false;
-    syncBusy = true;
+/* ---- Riwayat: muat, baca, ubah, hapus ---- */
+async function loadLogs() {
+  S.logsLoading = true; if (S.view === 'guru') render();
+  try { S.logs = await api('getLogs', {}, {teacher:true}); }
+  catch (e) { if (S.unlocked) toast('Gagal memuat riwayat: ' + e.message); }
+  S.logsLoading = false; if (S.view === 'guru') render();
+}
+function openLog(id) {
+  const l = S.logs.find(x => x.id === id); if (!l) return;
+  const chat = l.chat || [];
+  modal(`<div class="dh"><div><h3 style="margin:0">${esc(l.name)} ${esc(l.title)}</h3><div class="mu" style="font-size:13px">${fmt(l.t)}</div></div><span id="dbadge">${badge(urgOf(l))}</span></div>
+    <div class="chips"><span class="chip">${wOf(l.w).e} ${esc(l.w)}</span><span class="chip">${esc(l.g)}</span></div>
+    ${l.m ? `<div class="ann"><b>Catatan murid:</b> ${esc(l.m)}</div>` : ''}
+    <h4>Percakapan</h4>
+    <div class="tr" tabindex="0" aria-label="Riwayat percakapan">${chat.length ? chat.map(x => `<div class="m ${x.r === 'u' ? 'u' : 'b'}"><small>${x.r === 'u' ? esc(l.name) : 'SOBAT MURID'}</small>${esc(x.t)}</div>`).join('') : '<div class="empty">Murid belum bercerita lewat chat.</div>'}</div>
+    <div class="dctl"><label>Tingkat urgensi<select data-c="urgsel" data-id="${l.id}">${opts([['rendah','Rendah'],['sedang','Sedang'],['mendesak','Mendesak']], urgOf(l))}</select></label>
+    <label class="chk"><input type="checkbox" data-c="done" data-id="${l.id}" ${l.done ? 'checked' : ''}> Sudah ditindaki</label></div>
+    <div class="mfoot"><button class="btn dn" data-a="dellog" data-id="${l.id}">🗑️ Hapus</button><button class="btn" data-a="close">Tutup</button></div>`, true);
+}
+async function setLog(id, patch) {
+  const l = S.logs.find(x => x.id === id); if (!l) return;
+  const old = {}; Object.keys(patch).forEach(k => old[k] = l[k]);
+  const paint = () => { render(); const b = $('#dbadge'); if (b) b.innerHTML = badge(urgOf(l)); };
+  Object.assign(l, patch); paint();
+  try { await api('updateLog', {id, patch}, {teacher:true}); toast('Perubahan tersimpan'); }
+  catch (e) { Object.assign(l, old); paint(); toast('Gagal menyimpan: ' + e.message); }
+}
+function askDelLog(id) {
+  const l = S.logs.find(x => x.id === id); if (!l) return;
+  cfm('Hapus riwayat ini?', async () => {
     try {
-      await fetch(url, {
-        method: 'POST',
-        mode: 'no-cors',
-        keepalive: false,
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(buildSnapshot())
-      });
-      _rawSetItem.call(localStorage, 'tb_sync_dirty', '0');
-      _rawSetItem.call(localStorage, 'tb_sync_last', new Date().toISOString());
-      if (manual) showToast('Cadangan dikirim ke ' + SYNC_EMAIL, 'success');
-      return true;
-    } catch (e) {
-      if (manual) showToast('Gagal mengirim, akan dicoba lagi otomatis', 'error');
-      return false;
-    } finally {
-      syncBusy = false;
-      updateSyncStatus();
-    }
-  }
+      toast('Menghapus…');
+      await api('deleteLog', {id}, {teacher:true});
+      S.logs = S.logs.filter(x => x.id !== id); render(); toast('Riwayat dihapus');
+    } catch (e) { toast('Gagal menghapus: ' + e.message); }
+  }, `Riwayat ${esc(l.name)} ${esc(l.title)} (${fmt(l.t)}) beserta seluruh percakapannya akan dihapus permanen dari Google Sheets.`);
+}
 
-  function syncNow() { sendBackup(true); }
+/* =====================================================================
+   7. GAME PENYIRAMAN TANAMAN
+   ===================================================================== */
+function paintPlant() {
+  const p = S.p, h = Math.round(p * 1.1), y = 182 - h, g = $('#ps'); if (!g) return;
+  g.innerHTML = `<path d="M100 182V${y}" stroke="#2fa36b" stroke-width="6" stroke-linecap="round" fill="none"/>${p > 25 ? `<ellipse cx="82" cy="${182 - h * .45}" rx="18" ry="8" fill="#3fc080" transform="rotate(-25 82 ${182 - h * .45})"/>` : ''}${p > 50 ? `<ellipse cx="118" cy="${182 - h * .65}" rx="18" ry="8" fill="#3fc080" transform="rotate(25 118 ${182 - h * .65})"/>` : ''}${p >= 100 ? `<g transform="translate(100 ${y})">${[0,72,144,216,288].map(a => `<ellipse cy="-14" rx="8" ry="14" fill="#f4e0a3" transform="rotate(${a})"/>`).join('')}<circle r="8" fill="#d9b35a"/></g>` : p > 75 ? `<circle cx="100" cy="${y}" r="7" fill="#9bd8b6"/>` : ''}`;
+  $('#pbar').style.width = p + '%';
+  $('#pt').textContent = p >= 100 ? 'MasyaAllah, tanamanmu mekar indah! 🌸' : p > 50 ? 'Terus, tanamanmu semakin tinggi...' : 'Siramlah dengan lembut...';
+}
+function water() { if (S.p >= 100) { stopWater(); return; } S.p = Math.min(100, S.p + 2); splash(); paintPlant(); if (S.p >= 100) { stopWater(); chime(); toast('Tanamanmu mekar! 🌸'); } }
+function startWater() { if (hold || S.p >= 100) return; actx(); water(); hold = setInterval(water, 110); const s = $('#canw'); if (s) s.classList.add('pour'); }
+function stopWater() { clearInterval(hold); hold = null; const s = $('#canw'); if (s) s.classList.remove('pour'); }
 
-  function saveSyncSettings() {
-    const url = document.getElementById('inputSyncUrl').value.trim();
-    if (url && !/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec/.test(url)) {
-      showToast('URL harus berformat https://script.google.com/macros/s/.../exec', 'error');
-      return;
-    }
-    _rawSetItem.call(localStorage, 'tb_sync_url', url);
-    _rawSetItem.call(localStorage, 'tb_sync_auto', document.getElementById('chkAutoSync').checked ? '1' : '0');
-    showToast('Pengaturan sinkronisasi email tersimpan', 'success');
-    if (localStorage.getItem('tb_sync_dirty') === '1') scheduleSync();
-    updateSyncStatus();
-  }
+/* =====================================================================
+   8. JURNAL & CHAT MURID
+   ===================================================================== */
+async function saveJournal() {
+  const m = S.mood;
+  if (!m.w || (!m.g && !m.m.trim())) return toast('Pilih Cuaca Hati dan Pemicu atau tulis penyebabnya ya.');
+  const log = {id:uid(), t:Date.now(), name:S.me.name, title:S.me.title, w:m.w, g:m.g || 'Tulisan sendiri', m:m.m.trim(), done:false, urgency:scoreUrgency(m.w, m.m, [])};
+  S.saving = true; render();
+  try {
+    await api('saveLog', {log});
+    S.logId = log.id; S.saved = true; S.msgs = []; S.p = 0;
+    toast('Jurnal tersimpan. Jazakumullah khairan! 🌟');
+  } catch (e) { toast('Jurnal belum tersimpan: ' + e.message); }
+  S.saving = false; render();
+}
 
-  function updateSyncStatus() {
-    const el = document.getElementById('syncStatus');
-    if (!el) return;
-    const last = localStorage.getItem('tb_sync_last');
-    const dirty = localStorage.getItem('tb_sync_dirty') === '1';
-    let t = syncUrl() ? '' : '⚠️ Belum aktif: URL Apps Script belum diisi. ';
-    t += last ? 'Terakhir terkirim: ' + new Date(last).toLocaleString('id-ID') + '. ' : 'Belum pernah terkirim. ';
-    if (dirty && syncUrl()) t += 'Ada perubahan yang menunggu dikirim.';
-    el.textContent = t;
-  }
+function paintMsgs() {
+  const m = $('#msgs'); if (!m) return;
+  m.innerHTML = S.msgs.map(x => `<div class="m ${x.r}">${esc(x.t)}</div>`).join('') + (S.busy ? '<div class="m b">… menulis</div>' : '');
+  m.scrollTop = m.scrollHeight;
+}
+function startChat() {
+  const m = S.mood;
+  if (!S.msgs.length) S.msgs = [{r:'b', t:`Assalamu’alaikum, ${S.me.name} ${S.me.title}! 🌿 Hari ini cuaca hatimu ${m.w.toLowerCase()}${m.g ? `, dipicu oleh ${m.g.toLowerCase()}` : ''}${m.m ? ` ("${m.m}")` : ''}. Ceritakan apa yang kamu rasakan ya, aku siap mendengarkan.`}];
+  go('chat');
+}
+const fallback = mood => `${FB[mood.w]} ${mood.g ? `Soal ${mood.g.toLowerCase()}, bagian mana yang paling kamu rasakan?` : 'Bagian mana yang paling kamu rasakan?'} Kalau terasa berat, kamu boleh cerita juga ke Wali Kelas. 🌿`;
 
-  function initSync() {
-    document.getElementById('inputSyncUrl').value = syncUrl();
-    document.getElementById('chkAutoSync').checked = syncAuto();
-    updateSyncStatus();
-    if (localStorage.getItem('tb_sync_dirty') === '1') scheduleSync();
-    window.addEventListener('online', () => {
-      if (localStorage.getItem('tb_sync_dirty') === '1' && syncAuto()) sendBackup(false);
+/* AI dipanggil lewat Apps Script; model default & API Key dikelola di server */
+const aiReply = arr => api('chat', {name:S.me.name, title:S.me.title, mood:S.mood, msgs:arr.slice(1).map(({r, t}) => ({r, t}))}, {timeout:CONFIG.CHAT_TIMEOUT_MS}).then(d => d.text);
+
+/* Simpan transkrip chat + urgensi ke Google Sheets (latar belakang) */
+function syncChat(id, arr, mood) {
+  if (!id) return;
+  const urgency = scoreUrgency(mood.w, mood.m, arr.filter(x => x.r === 'u').map(x => x.t));
+  api('saveChat', {id, msgs:arr.map(({r, t}) => ({r, t})), urgency}).catch(() => {
+    if (!syncChat.w) { syncChat.w = 1; toast('Percakapan belum tersimpan ke server.'); }
+  });
+}
+async function send() {
+  const i = $('#ci'), t = i.value.trim(); if (!t || S.busy) return;
+  const arr = S.msgs, id = S.logId, mood = {...S.mood};
+  i.value = ''; arr.push({r:'u', t}); S.busy = true; paintMsgs();
+  let rep;
+  if (D.hasKey) {
+    try { rep = await aiReply(arr); }
+    catch (e) { rep = fallback(mood); if (e.message !== 'NO_KEY') toast('AI belum terhubung. Memakai balasan sederhana.'); }
+  } else { await new Promise(r => setTimeout(r, 700)); rep = fallback(mood); }
+  if (RX_CRIT.test(t)) rep += ' Aku peduli padamu. Tolong segera ceritakan hal ini kepada Wali Kelas atau orang dewasa yang kamu percaya ya. 💛';
+  arr.push({r:'b', t:rep}); S.busy = false;
+  if (S.msgs === arr && S.view === 'chat') paintMsgs();
+  syncChat(id, arr, mood);
+}
+function endChat(to) {
+  const said = S.msgs.some(x => x.r === 'u');
+  const fin = () => {
+    modal(''); S.msgs = [];
+    if (to === 'out') { S.me = null; S.mood = {w:null, g:null, m:''}; S.saved = false; S.logId = null; S.p = 0; go('login'); } else go('dash');
+  };
+  if (!said) { fin(); return; }
+  cb = fin; speak('Terima kasih ceritanya. Pak Hilmy akan berusaha membuatmu bahagia selalu.');
+  modal(`<div style="font-size:44px">💛</div><h3>Terima kasih ceritanya</h3><p class="mu" style="margin:10px 0 18px">Pak Hilmy akan berusaha membuatmu bahagia selalu.</p><button class="btn em" style="width:100%" data-a="yes">${to === 'out' ? 'Keluar' : 'Kembali ke Dashboard'}</button>`);
+}
+
+/* =====================================================================
+   9. EKSPOR LAPORAN
+   ===================================================================== */
+function xls() {
+  const q = s => { let v = String(s == null ? '' : s); if (/^[=+\-@]/.test(v)) v = "'" + v; return `"${v.replace(/"/g, '""')}"`; };
+  const rows = [['Laporan Jurnal Emosi Murid'], ['Dicetak', fmt(Date.now())], [], ['Tanggal','Nama','Gelar Rahasia','Urgensi','Cuaca Hati','Pemicu','Catatan Manual','Jumlah Pesan Chat','Status'],
+    ...fl().map(l => [fmt(l.t), l.name, l.title, URG[urgOf(l)].l, l.w, l.g, l.m, (l.chat || []).length, l.done ? 'Sudah Ditindaki' : 'Belum Ditindaki'])];
+  const b = new Blob(['\ufeff' + rows.map(r => r.map(q).join(',')).join('\r\n')], {type:'text/csv;charset=utf-8'}), a = document.createElement('a');
+  a.href = URL.createObjectURL(b); a.download = 'laporan_murid.csv'; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000); toast('Laporan Excel (CSV) diunduh');
+}
+function pdf() {
+  const L = fl();
+  $('#rpt').innerHTML = `<h1>Laporan Jurnal Emosi Murid</h1><p>Dicetak ${fmt(Date.now())} • Total: ${L.length} data</p><table><tr><th>Tanggal</th><th>Murid</th><th>Urgensi</th><th>Cuaca</th><th>Pemicu</th><th>Catatan</th><th>Status</th></tr>${L.map(l => `<tr><td>${fmt(l.t)}</td><td>${esc(l.name)} ${esc(l.title)}</td><td>${URG[urgOf(l)].l}</td><td>${esc(l.w)}</td><td>${esc(l.g)}</td><td>${esc(l.m)}</td><td>${l.done ? 'Sudah' : 'Belum'}</td></tr>`).join('')}</table>`;
+  window.print();
+}
+addEventListener('afterprint', () => { $('#rpt').innerHTML = ''; });
+
+/* =====================================================================
+   10. EVENT HANDLER
+   ===================================================================== */
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-a]'); if (!el) return;
+  const a = el.dataset.a, k = el.dataset.k, i = +el.dataset.i;
+  if (a === 'ovc') { if (e.target === el) modal(''); return; }
+  if (a === 'close') modal('');
+  else if (a === 'yes') { const f = cb; cb = null; modal(''); if (f) f(); }
+  else if (a === 'go') go(el.dataset.v);
+  else if (a === 'retry') boot();
+  else if (a === 'tlogin') S.unlocked ? go('guru') : tlogin();
+  else if (a === 'mute') { S.mute = !S.mute; if (S.mute) { stopAmb(); if (TTS) speechSynthesis.cancel(); } render(); }
+  else if (a === 'endchat') endChat(k);
+  else if (a === 'lock') lockTeacher();
+  else if (a === 'out') { S.me = null; S.mood = {w:null, g:null, m:''}; S.saved = false; S.logId = null; S.msgs = []; S.p = 0; go('login'); }
+  else if (a === 'mw') { S.mood.w = k; S.saved = false; render(); }
+  else if (a === 'mg') { S.mood.g = k; S.saved = false; render(); }
+  else if (a === 'savej') saveJournal();
+  else if (a === 'chatgo') startChat();
+  else if (a === 'water') { /* ditangani pointer events */ }
+  else if (a === 'tab') { S.tab = k; render(); }
+  else if (a === 'reload') loadLogs();
+  else if (a === 'urg') { S.urg = k; render(); }
+  else if (a === 'critgo') { S.tab = 'riwayat'; S.urg = 'mendesak'; S.flt = 'open'; render(); }
+  else if (a === 'view') openLog(el.dataset.id);
+  else if (a === 'dellog') askDelLog(el.dataset.id);
+  else if (a === 'bulk') {
+    const mode = $('#bm').value, raw = $('#bt').value.split('\n').map(s => s.trim()).filter(Boolean);
+    let n = 0, t = 0;
+    const addU = (arr, v) => { v = v.trim(); if (v && !arr.includes(v)) { arr.push(v); return 1; } return 0; };
+    raw.forEach(line => {
+      if (mode === 'p') { const [x, ...y] = line.split(/[,;|]/); n += addU(D.names, x || ''); t += addU(D.titles, y.join(',') || ''); }
+      else line.split(',').forEach(x => { if (mode === 'n') n += addU(D.names, x); else t += addU(D.titles, x); });
     });
-    document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden' && localStorage.getItem('tb_sync_dirty') === '1' && syncAuto() && syncUrl()) {
-        clearTimeout(syncTimer);
-        sendBackup(false);
-      }
+    save(`Ditambahkan: ${n} Nama, ${t} Gelar`); render();
+  }
+  else if (a === 'ed') {
+    const old = D[k][i];
+    ask('Edit data', old, v => {
+      v = v.trim(); if (!v) return;
+      if (D[k].some((x, j) => x === v && j !== i)) return toast('Data sudah ada.');
+      D[k][i] = v;
+      if (k === 'names') Object.keys(D.piket).forEach(d => D.piket[d] = D.piket[d].map(x => x === old ? v : x));
+      save(); render();
     });
   }
-  window.addEventListener('load', initSync);
-  </script>
+  else if (a === 'dl') {
+    const old = D[k][i];
+    cfm(`Hapus "${esc(old)}"?`, () => {
+      D[k].splice(i, 1);
+      if (k === 'names') Object.keys(D.piket).forEach(d => D.piket[d] = D.piket[d].filter(x => x !== old));
+      save(); render();
+    });
+  }
+  else if (a === 'pk') { const d = el.dataset.d, n = el.dataset.n, l = D.piket[d] || []; D.piket[d] = l.includes(n) ? l.filter(x => x !== n) : [...l, n]; save(); el.classList.toggle('on'); }
+  else if (a === 'da') { D.ann = D.ann.filter(x => x.id !== +el.dataset.id); save('Pengumuman dihapus'); render(); }
+  else if (a === 'xls') xls();
+  else if (a === 'pdf') pdf();
+  else if (a === 'delkey') cfm('Hapus API Key?', async () => {
+    try { await api('deleteKey', {}, {teacher:true}); D.hasKey = false; cacheCfg(); toast('API Key dihapus'); render(); }
+    catch (x) { toast('Gagal menghapus key: ' + x.message); }
+  });
+  else if (a === 'test') {
+    const r = $('#tr'); r.textContent = 'Menguji…';
+    api('testKey', {key:$('#ak').value.trim()}, {teacher:true, timeout:CONFIG.CHAT_TIMEOUT_MS})
+      .then(() => { r.textContent = '✅ Koneksi berhasil.'; })
+      .catch(x => { r.textContent = '❌ Gagal terhubung (' + x.message + ').'; });
+  }
+});
+
+/* Tombol siram (tahan) */
+const press = e => { if (e.target.closest && e.target.closest('#sibtn')) { e.preventDefault(); startWater(); } };
+document.addEventListener('pointerdown', press);
+['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => document.addEventListener(ev, () => stopWater()));
+document.addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && e.target.id === 'sibtn' && !e.repeat) { e.preventDefault(); startWater(); } });
+document.addEventListener('keyup', e => { if (e.target.id === 'sibtn') stopWater(); });
+
+document.addEventListener('input', e => {
+  const t = e.target;
+  if (t.dataset.i === 'man') {
+    S.mood.m = t.value; S.saved = false;
+    const b = document.querySelector('[data-a=savej]');
+    if (b && !S.saving) { b.disabled = false; b.textContent = 'Simpan Jurnal'; }
+  } else if (t.dataset.i === 'q') {
+    S.q = t.value; const l = $('#rlist'); if (l) l.innerHTML = rlist();
+  }
+});
+
+document.addEventListener('change', e => {
+  const t = e.target, c = t.dataset.c; if (!c) return;
+  if (c === 'ros') { D.roster[t.dataset.d] = t.value; save('Roster tersimpan'); }
+  else if (c === 'done') setLog(t.dataset.id, {done:t.checked});
+  else if (c === 'urgsel') setLog(t.dataset.id, {urgency:t.value});
+  else if (c === 'flt') { S.flt = t.value; render(); }
+  else if (c === 'sort') { S.sort = t.value; render(); }
+});
+
+document.addEventListener('submit', e => {
+  e.preventDefault(); const f = e.target.dataset.f;
+  if (f === 'login') {
+    const n = $('#sn').value, t = $('#st').value; if (!n || !t) return;
+    S.me = {name:n, title:t}; wel = false; speak(`Assalamu alaikum ${n}, mari bercerita bareng Sobat Murid.`);
+    S.mood = {w:null, g:null, m:''}; S.saved = false; S.logId = null; S.msgs = []; S.p = 0; go('dash');
+  }
+  else if (f === 'chat') send();
+  else if (f === 'pw') checkPw();
+  else if (f === 'ask') { const v = $('#modal input').value; const fn = cb; cb = null; modal(''); if (fn) fn(v); }
+  else if (f === 'add') {
+    const k = e.target.dataset.k, i = e.target.querySelector('input'), v = i.value.trim();
+    if (!v) return; if (D[k].includes(v)) return toast('Data sudah ada.');
+    D[k].push(v); save(); render();
+  }
+  else if (f === 'ann') {
+    const v = $('#an').value.trim(); if (!v) return toast('Isi pengumuman dulu.');
+    D.ann.push({id:Date.now(), t:Date.now(), x:v}); save('Pengumuman terbit'); render();
+  }
+  else if (f === 'key') {
+    const k = $('#ak').value.trim(); if (!k) return toast('Isi API Key dulu.');
+    api('saveKey', {key:k}, {teacher:true})
+      .then(() => { D.hasKey = true; cacheCfg(); toast('API Key tersimpan'); render(); })
+      .catch(x => toast('Gagal menyimpan key: ' + x.message));
+  }
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') modal(''); });
+
+const firstGesture = e => { if (!wel || e.target.closest('[data-f=login]') || e.target.closest('.ov')) return; wel = false; speak('Selamat datang, Sobat Murid.'); };
+document.addEventListener('pointerdown', e => { const b = e.target.closest('button'); if (b && b.id !== 'sibtn' && !b.disabled) tick(); firstGesture(e); });
+document.addEventListener('keydown', e => { if (e.key === 'Tab') return; firstGesture(e); });
+
+/* Logo gagal dimuat → sembunyikan agar tidak muncul ikon rusak */
+document.addEventListener('error', e => { if (e.target.classList && e.target.classList.contains('app-logo')) e.target.classList.add('gone'); }, true);
+
+boot();
+setTimeout(() => { if (wel && S.view === 'login') speak('Selamat datang, Sobat Murid.'); }, 1200);
+</script>
 </body>
 </html>
