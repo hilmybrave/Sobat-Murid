@@ -131,7 +131,49 @@ form.cf{display:flex;gap:8px;padding:12px;border-top:1px solid var(--gb)}
 .err{color:#ffb4b4;font-size:13px;min-height:20px}
 #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translate(-50%,30px);opacity:0;padding:11px 20px;border-radius:99px;z-index:60;pointer-events:none;transition:all .4s;background:rgba(4,32,29,.96);border:1px solid var(--gold);max-width:92vw;text-align:center}#toast.on{opacity:1;transform:translate(-50%,0)}
 .empty{text-align:center;padding:22px;color:var(--mute)}
-.spin{width:34px;height:34px;border:3px solid var(--gb);border-top-color:var(--gold);border-radius:50%;animation:sp 1s linear infinite;margin:14px auto}@keyframes sp{to{transform:rotate(360deg)}}
+/* ===== Loader futuristik: orbit dual-ring + shimmer glass ===== */
+.ldr{display:flex;flex-direction:column;align-items:center;gap:14px;padding:10px 0}
+.orb{position:relative;width:92px;height:92px;display:grid;place-items:center}
+.orb .r{position:absolute;inset:0;border-radius:50%;border:2px solid transparent}
+.orb .r1{border-top-color:var(--gold-hi);border-right-color:var(--gold);animation:orb 1.4s cubic-bezier(.6,.1,.4,.9) infinite;filter:drop-shadow(0 0 8px rgba(217,179,90,.8))}
+.orb .r2{inset:12px;border-bottom-color:var(--em);border-left-color:#46d6ad;animation:orb 1.9s linear infinite reverse;filter:drop-shadow(0 0 8px rgba(31,174,138,.8))}
+.orb .r3{inset:24px;border:1px dashed rgba(217,179,90,.5);animation:orb 6s linear infinite}
+.orb .dot{position:absolute;inset:0;animation:orb 2.6s linear infinite}
+.orb .dot::after{content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:var(--gold-hi);box-shadow:0 0 12px 3px rgba(244,224,163,.8)}
+.orb .core{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,var(--gold-hi),var(--gold) 60%,var(--gold-lo));animation:core 1.8s ease-in-out infinite}
+@keyframes orb{to{transform:rotate(360deg)}}
+@keyframes core{0%,100%{transform:scale(.8);box-shadow:0 0 10px 2px rgba(217,179,90,.5)}50%{transform:scale(1.15);box-shadow:0 0 26px 8px rgba(217,179,90,.75)}}
+.ldr-t{font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--gold-hi);animation:blink 1.8s ease-in-out infinite}
+.ldr-t .d{display:inline-block;animation:blink 1.2s infinite}.ldr-t .d:nth-child(2){animation-delay:.2s}.ldr-t .d:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.35}50%{opacity:1}}
+.ldr-bar{width:min(220px,70%);height:3px;border-radius:9px;background:rgba(255,255,255,.1);overflow:hidden}
+.ldr-bar::after{content:"";display:block;height:100%;width:40%;background:linear-gradient(90deg,transparent,var(--gold-hi),transparent);animation:slide 1.4s ease-in-out infinite}
+@keyframes slide{from{transform:translateX(-100%)}to{transform:translateX(250%)}}
+.shim{position:relative;overflow:hidden}
+.shim::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(110deg,transparent 30%,rgba(244,224,163,.10) 50%,transparent 70%);transform:translateX(-100%);animation:sweep 2.4s ease-in-out infinite}
+@keyframes sweep{to{transform:translateX(100%)}}
+.ldr.sm{flex-direction:row;justify-content:center;gap:12px;padding:6px 0}.ldr.sm .orb{width:36px;height:36px}.ldr.sm .orb .r2{inset:6px}.ldr.sm .orb .r3,.ldr.sm .ldr-bar{display:none}.ldr.sm .core{width:8px;height:8px}.ldr.sm .orb .dot::after{width:5px;height:5px;margin-left:-2.5px;top:-2px}
+.skel{height:12px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.06),rgba(244,224,163,.18),rgba(255,255,255,.06));background-size:200% 100%;animation:skl 1.4s linear infinite}@keyframes skl{to{background-position:-200% 0}}
+
+/* ===== Progres hapalan ===== */
+.haf-top{display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.ring{--p:0;width:96px;height:96px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--gold) calc(var(--p)*1%),rgba(255,255,255,.1) 0);position:relative;flex:none;box-shadow:0 0 22px -4px rgba(217,179,90,.5)}
+.ring::before{content:"";position:absolute;inset:9px;border-radius:50%;background:#06312d}
+.ring b{position:relative;font:700 24px Amiri,serif;color:var(--gold-hi)}
+.haf-info{flex:1;min-width:180px}.haf-info .big{font:700 22px Amiri,serif;color:var(--gold-hi);overflow-wrap:anywhere}
+.haf-grid{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));margin-top:14px}
+.haf-it{padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid var(--gb)}
+.haf-it small{display:block;color:var(--mute);font-size:11px}.haf-it b{font-size:15px;color:var(--gold-hi);overflow-wrap:anywhere}
+
+/* ===== Roster sepekan ===== */
+.card.clk{cursor:pointer;transition:transform .25s,border-color .25s}.card.clk:hover{transform:translateY(-2px);border-color:var(--gold)}
+.hint{display:inline-block;margin-top:10px;font-size:12px;font-weight:700;color:var(--gold-hi)}
+.wk{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));max-height:min(60vh,520px);overflow-y:auto;padding:4px}
+.wd{padding:12px 14px;border-radius:16px;border:1px solid var(--gb);background:rgba(255,255,255,.04)}
+.wd h4{margin:0 0 6px;font-size:15px}
+.wd.now{border-color:var(--gold);background:rgba(217,179,90,.16);box-shadow:0 0 0 3px rgba(217,179,90,.25)}.wd.now h4{color:var(--gold-hi)}
+.tag{display:inline-block;margin-left:8px;padding:1px 9px;border-radius:99px;background:var(--gold);color:#052321;font:800 11px 'Plus Jakarta Sans',sans-serif;vertical-align:middle}
+.wd ul{list-style:none;padding:0}.wd li{padding:4px 0;border-bottom:1px dashed var(--gb);font-size:14px;overflow-wrap:anywhere}.wd li:last-child{border:0}
 code{background:rgba(0,0,0,.3);padding:1px 6px;border-radius:6px;font-size:13px}
 
 #rpt{display:none}
@@ -153,6 +195,8 @@ code{background:rgba(0,0,0,.3);padding:1px 6px;border-radius:6px;font-size:13px}
 const CONFIG = {
   // URL Web App Google Apps Script (berakhiran /exec)
   GAS_URL: 'https://script.google.com/macros/s/AKfycbySZIlH-uv3HeRSF-OpPLyoNe7DkAudosSwvjsDnMCgVMqUbQfctv1iAtKAjVzUrCoAHg/exec',
+  // URL Web App Google Apps Script untuk data progres hapalan Quran
+  HAF_URL: 'https://script.google.com/macros/s/AKfycbybOzeEo-UGCzkTrBNnS7a20Bla7ti6zhg4ZWsMI8TH1arWcrqT971Y3ewYHHAc6JzEow/exec',
   TIMEOUT_MS: 25000,
   CHAT_TIMEOUT_MS: 40000,
   CACHE_KEY: 'sm_cfg_cache'
@@ -205,7 +249,7 @@ const DEF = {names:['Bintang','Pelita','Embun','Cahaya'], titles:['Si Pemberani'
 const D = JSON.parse(JSON.stringify(DEF));
 const S = {view:'boot', me:null, mood:{w:null,g:null,m:''}, saved:false, saving:false, logId:null, tab:'ringkas',
   unlocked:false, token:'', logs:[], logsLoading:false, msgs:[], busy:false, p:0, mute:false,
-  flt:'all', urg:'all', q:'', sort:'urg', tries:0, until:0, err:''};
+  flt:'all', urg:'all', q:'', sort:'new', tries:0, until:0, err:'', haf:{for:'', st:'idle', row:null, err:''}};
 let ac = null, hold = null, amb = null, cb = null, wel = true;
 
 function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('on'), 3000); }
@@ -354,10 +398,12 @@ function head() {
     ${m ? '<button class="btn gh sm" data-a="out">Ganti Identitas</button>' : ''}</div>`;
   return `<header><button class="brand" data-a="go" data-v="login"><img id="app-logo" class="app-logo" src="logo.png" alt="Logo SOBAT MURID"><span><b>SOBAT MURID</b><small>Madrasah Modern</small></span></button>${nav}</header>`;
 }
+/* Indikator memuat futuristik (sm = versi ringkas) */
+const loader = (txt, sm) => `<div class="ldr ${sm ? 'sm' : ''}" role="status" aria-live="polite"><div class="orb" aria-hidden="true"><span class="r r1"></span><span class="r r2"></span><span class="r r3"></span><span class="dot"></span><span class="core"></span></div><div class="ldr-t">${esc(txt)}<span class="d">.</span><span class="d">.</span><span class="d">.</span></div><div class="ldr-bar" aria-hidden="true"></div></div>`;
 function greetTime() { const h = new Date().getHours(); return h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam'; }
 
 const V = {
-  boot: () => `<section class="glass hero"><div class="spin" aria-hidden="true"></div><p class="mu">Menghubungkan ke server…</p></section>`,
+  boot: () => `<section class="glass hero shim">${loader('Menghubungkan ke server')}<p class="mu" style="font-size:13px">Menyiapkan ruang amanmu…</p></section>`,
   bootfail: () => `<section class="glass hero"><h2>Tidak dapat terhubung</h2><p class="mu" style="margin:8px 0 16px">${esc(S.err)}. Periksa koneksi internet dan URL Google Apps Script.</p><button class="btn" data-a="retry">Coba lagi</button></section>`,
   setup: () => `<section class="glass hero" style="text-align:left"><h2>Hubungkan ke Google Apps Script</h2>
     <p class="mu" style="margin:8px 0">Buka <code>index.html</code>, lalu isi <code>CONFIG.GAS_URL</code> dengan URL Web App (berakhiran <code>/exec</code>) dari deployment Apps Script Anda. Panduan pemasangan ada di komentar awal <code>Code.gs</code>.</p></section>`,
@@ -367,7 +413,7 @@ const V = {
     const d = today(), r = (D.roster[d] || '').split('\n').map(s => s.trim()).filter(Boolean), pk = D.piket[d] || [], m = S.mood;
     return `<div class="glass card" style="text-align:center"><div class="ar" style="font-size:24px">السلام عليكم</div><h2>${greetTime()}, ${esc(S.me.name)} ${esc(S.me.title)}! 🌙</h2><p class="mu">Semoga harimu penuh berkah. Hari ini ${DAYS[d]}, ${new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}.</p><div class="chips" style="justify-content:center;margin-top:8px"><span class="chip">Nama: ${esc(S.me.name)}</span><span class="chip">Gelar Rahasia: ${esc(S.me.title)}</span></div></div>
     ${D.ann.length ? `<div class="glass card"><h3>📢 Pengumuman Kelas</h3>${D.ann.slice().reverse().slice(0,5).map(a => `<div class="ann">${esc(a.x)}<div class="mu" style="font-size:12px">${fmt(a.t)}</div></div>`).join('')}</div>` : ''}
-    <div class="two"><div class="glass card"><h3>📖 Roster Pelajaran ${DAYS[d]}</h3>${d === 0 ? '<p class="mu">Hari Minggu libur. Selamat beristirahat!</p>' : r.length ? `<ul class="l">${r.map(x => `<li><span>${esc(x)}</span></li>`).join('')}</ul>` : '<p class="mu">Jadwal hari ini belum diisi Wali Kelas.</p>'}</div>
+    ${hafCard()}<div class="two"><div class="glass card clk" data-a="roster" role="button" tabindex="0" aria-label="Lihat roster pelajaran sepekan"><h3>📖 Roster Pelajaran ${DAYS[d]}</h3>${d === 0 ? '<p class="mu">Hari Minggu libur. Selamat beristirahat!</p>' : r.length ? `<ul class="l">${r.map(x => `<li><span>${esc(x)}</span></li>`).join('')}</ul>` : '<p class="mu">Jadwal hari ini belum diisi Wali Kelas.</p>'}<span class="hint">🗓️ Ketuk untuk melihat jadwal sepekan →</span></div>
     <div class="glass card"><h3>🧹 Jadwal Piket Hari Ini</h3>${pk.length ? `<div class="chips">${pk.map(x => `<span class="chip">${esc(x)}</span>`).join('')}</div>` : '<p class="mu">Belum ada murid yang bertugas piket hari ini.</p>'}</div></div>
     <div class="glass card"><h3>🌤️ Cuaca Hati Hari Ini</h3><p class="mu">Bagaimana perasaanmu sekarang?</p><div class="grid">${W.map(w => `<button class="opt ${m.w === w.k ? 'on' : ''}" data-a="mw" data-k="${w.k}"><span>${w.e}</span>${w.k}</button>`).join('')}</div>
     <h3 style="margin-top:12px">💭 Pemicu Perasaan</h3><div class="grid">${T.map(t => `<button class="opt ${m.g === t.k ? 'on' : ''}" data-a="mg" data-k="${t.k}"><span>${t.e}</span>${t.k}</button>`).join('')}</div>
@@ -381,25 +427,147 @@ const V = {
     if (!S.unlocked) return '';
     const crit = S.logs.filter(l => urgOf(l) === 'mendesak' && !l.done).length;
     const tabs = [['ringkas','📊 Ringkasan'],['murid','👥 Murid'],['jadwal','🗓️ Jadwal & Piket'],['riwayat','📋 Riwayat' + (crit ? `<span class="cnt" title="${crit} mendesak belum ditindaki">${crit}</span>` : '')],['info','📢 Pengumuman'],['ai','🤖 Pengaturan AI']];
-    return `<h2 style="margin:6px 0">Area Wali Kelas</h2><div class="tabs">${tabs.map(t => `<button class="btn sm ${S.tab === t[0] ? '' : 'gh'}" data-a="tab" data-k="${t[0]}">${t[1]}</button>`).join('')}</div>${S.logsLoading ? '<p class="mu" style="margin-bottom:10px">Memuat data dari Google Sheets…</p>' : ''}${G[S.tab]()}`;
+    return `<h2 style="margin:6px 0">Area Wali Kelas</h2><div class="tabs">${tabs.map(t => `<button class="btn sm ${S.tab === t[0] ? '' : 'gh'}" data-a="tab" data-k="${t[0]}">${t[1]}</button>`).join('')}</div>${S.logsLoading ? `<div class="glass shim" style="margin-bottom:12px;padding:8px 14px">${loader('Memuat data dari Google Sheets', true)}</div>` : ''}${G[S.tab]()}`;
   }
 };
+
+/* ---- Progres Hapalan Quran (data dari Apps Script terpisah) ---- */
+const nk = s => String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]/g, '');
+const nm = s => String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+const numOf = v => { const m = String(v).match(/-?\d+(?:[.,]\d+)?/); return m ? parseFloat(m[0].replace(',', '.')) : null; };
+const isNum = v => /^\s*\d+(?:[.,]\d+)?\s*$/.test(String(v));
+const pick = (r, ks) => { for (const k of ks) { const v = r[k]; if (v !== undefined && v !== null && String(v).trim() !== '') return v; } return ''; };
+const dtxt = v => { if (v === '') return ''; const s = String(v), d = new Date(s); return /\d{4}|\d{1,2}[\/-]\d{1,2}/.test(s) && !isNaN(d) && d.getFullYear() > 2000 ? d.toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}) : s; };
+/* Nama kolom dicocokkan longgar (huruf kecil tanpa spasi/simbol) agar tahan beda penamaan di Sheets */
+const HK = {
+  name:['nama','namamurid','name','murid','siswa','namasiswa','santri','namasantri'],
+  juz:['juz','juzke','jumlahjuz','totaljuz','capaianjuz','hafalanjuz','hapalanjuz'],
+  surah:['surah','surat','namasurah','suratterakhir','surahterakhir','hafalansurah','hapalansurah'],
+  ayat:['ayat','ayatterakhir','sampaiayat','ayatke','jumlahayat'],
+  persen:['persen','persentase','progres','progress','capaian','percent','persenhafalan','persenhapalan'],
+  target:['target','targetjuz'],
+  ket:['keterangan','catatan','status','predikat','note','nilai'],
+  tgl:['tanggal','tgl','date','waktu','timestamp','diperbarui','updated']
+};
+function normRow(x) { const o = {}, L = {}; Object.keys(x).forEach(k => { o[nk(k)] = x[k]; L[nk(k)] = String(k); }); o.__L = L; return o; }
+function hafRows(j) {
+  if (Array.isArray(j)) {
+    if (j.length && Array.isArray(j[0])) { const h = j[0].map(String); return j.slice(1).map(r => { const o = {}; h.forEach((k, i) => { if (k) o[k] = r[i]; }); return normRow(o); }); }
+    return j.filter(x => x && typeof x === 'object' && !Array.isArray(x)).map(normRow);
+  }
+  if (j && typeof j === 'object') {
+    if (HK.name.some(k => Object.keys(j).some(x => nk(x) === k))) return [normRow(j)];
+    const pref = ['data','rows','result','hasil','items','records','values','murid','hapalan','hafalan'];
+    for (const k of [...pref, ...Object.keys(j).filter(k => !pref.includes(k))]) {
+      if (j[k] && typeof j[k] === 'object') { const r = hafRows(j[k]); if (r.length) return r; }
+    }
+    const ks = Object.keys(j).filter(k => j[k] && typeof j[k] === 'object' && !Array.isArray(j[k]));
+    if (ks.length) return ks.map(k => normRow({nama:k, ...j[k]}));
+  }
+  return [];
+}
+const hafName = r => { let v = pick(r, HK.name); if (v === '') { const k = Object.keys(r).find(k => k !== '__L' && /nama|name|siswa|murid|santri/.test(k) && String(r[k]).trim() !== ''); v = k ? r[k] : ''; } return nm(v); };
+/* Pencocokan HANYA berdasarkan Nama (gelar rahasia tidak dipakai). Bertingkat dari paling ketat;
+   tingkat longgar hanya diterima bila mengarah ke satu nama saja agar data murid tidak tertukar. */
+const lev = (a, b) => { const m = a.length, n = b.length; if (Math.abs(m - n) > 2) return 3; let p = Array.from({length:n + 1}, (_, j) => j); for (let i = 1; i <= m; i++) { const c = [i]; for (let j = 1; j <= n; j++) c[j] = Math.min(p[j] + 1, c[j - 1] + 1, p[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1)); p = c; } return p[n]; };
+function hafMatch(rows, name) {
+  const n = nm(name), nc = n.replace(/\s/g, ''); if (!n) return {m:[], amb:null};
+  const tiers = [
+    x => x === n,
+    x => (' ' + x + ' ').includes(' ' + n + ' ') || (' ' + n + ' ').includes(' ' + x + ' '),
+    x => { const c = x.replace(/\s/g, ''); return c === nc || (nc.length >= 4 && c.length >= 4 && (c.startsWith(nc) || nc.startsWith(c))); },
+    x => nc.length >= 5 && lev(x.replace(/\s/g, ''), nc) <= 1
+  ];
+  let amb = null;
+  for (const t of tiers) {
+    const m = rows.filter(r => { const x = hafName(r); return x && t(x); });
+    if (!m.length) continue;
+    const names = [...new Set(m.map(hafName))];
+    if (names.length > 1) { amb = amb || names.slice(0, 6); continue; }
+    return {m, amb:null};
+  }
+  return {m:[], amb};
+}
+function paintHaf() { const el = $('#haf'); if (el) el.innerHTML = hafBody(); }
+async function loadHaf(force) {
+  const name = S.me && S.me.name; if (!name) return;
+  if (!force && S.haf.for === name) return;
+  S.haf = {for:name, st:'loading', row:null, err:''}; paintHaf();
+  const ctl = new AbortController(), to = setTimeout(() => ctl.abort(), CONFIG.TIMEOUT_MS);
+  const base = CONFIG.HAF_URL, sep = base.includes('?') ? '&' : '?';
+  let nh, dbg = {};
+  /* Ambil data lalu cocokkan nama murid (tanpa gelar rahasia) */
+  const grab = async extra => {
+    const res = await fetch(`${base}${sep}_=${Date.now()}${extra}`, {method:'GET', mode:'cors', redirect:'follow', signal:ctl.signal});
+    const txt = await res.text(); dbg = {http:res.status, preview:txt.slice(0, 300)};
+    const j = JSON.parse(txt);
+    if (j && j.ok === false) throw new Error(j.error || 'Server menolak permintaan');
+    dbg.diag = j && j.data && !Array.isArray(j.data) && typeof j.data.diag === 'string' ? j.data.diag : '';
+    const rows = hafRows(j); dbg.rows = rows.length; dbg.cols = rows.length ? Object.keys(rows[0]).filter(k => k !== '__L').join(', ') : ''; dbg.names = rows.slice(0, 8).map(hafName).join(' | ');
+    const hm = hafMatch(rows, name); dbg.amb = hm.amb ? hm.amb.join(' | ') : '';
+    return hm.m;
+  };
+  try {
+    const m = await grab(`&action=hafalanSiswa&nama=${encodeURIComponent(name)}`);
+    const ts = r => { const d = Date.parse(pick(r, HK.tgl)); return isNaN(d) ? -1 : d; };
+    nh = m.length ? {for:name, st:'ok', row:m.slice().sort((a, b) => ts(a) - ts(b)).pop(), err:'', dbg} : {for:name, st:'none', row:null, err:'', dbg};
+  } catch (e) {
+    nh = {for:name, st:'err', row:null, dbg, err: e.name === 'AbortError' ? 'Waktu tunggu habis' : e instanceof TypeError ? 'Tidak dapat terhubung ke server' : e instanceof SyntaxError ? 'Respons server tidak valid' : e.message === 'Sesi berakhir' ? 'Script hapalan belum diperbarui: tempel Code.gs terbaru lalu deploy versi baru' : e.message};
+  } finally { clearTimeout(to); }
+  if (S.haf.for !== name) return;  /* murid sudah berganti */
+  S.haf = nh; paintHaf();
+}
+function hafBody() {
+  const h = S.haf;
+  if (!S.me) return '';
+  if (h.for !== S.me.name || h.st === 'idle' || h.st === 'loading') return `<div class="shim" style="border-radius:14px;padding:4px 0">${loader('Memuat progres hapalan', true)}<div class="skel" style="width:70%;margin:10px auto 6px"></div><div class="skel" style="width:50%;margin:0 auto"></div></div>`;
+  if (h.st === 'err') return `<p class="mu">Progres hapalan belum dapat dimuat (${esc(h.err)}).</p><button class="btn gh sm" style="margin-top:10px" data-a="hafretry">↻ Coba lagi</button>${hafDbg(h.dbg)}`;
+  if (h.st === 'none' && h.dbg && h.dbg.amb) return `<p class="mu">Nama ${esc(S.me.name)} cocok dengan lebih dari satu data hapalan (${esc(h.dbg.amb)}). Samakan penulisan nama di aplikasi dengan data hapalan agar progres tidak tertukar.</p><button class="btn gh sm" style="margin-top:10px" data-a="hafretry">↻ Muat ulang</button>${hafDbg(h.dbg)}`;
+  if (h.st === 'none') return `<p class="mu">Belum ada data hapalan untuk ${esc(S.me.name)}. Progresmu akan tampil di sini setelah dicatat oleh guru.</p><button class="btn gh sm" style="margin-top:10px" data-a="hafretry">↻ Muat ulang</button>${hafDbg(h.dbg)}`;
+  const r = h.row, juz = pick(r, HK.juz), surah = pick(r, HK.surah), ayat = pick(r, HK.ayat), target = pick(r, HK.target), ket = pick(r, HK.ket), tgl = pick(r, HK.tgl), pv = pick(r, HK.persen);
+  let p = null;
+  if (pv !== '') { let x = numOf(pv); if (x !== null) { if (x > 0 && x <= 1 && !/%/.test(String(pv)) && /[.,]/.test(String(pv))) x *= 100; p = x; } }
+  if (p === null && isNum(juz)) p = numOf(juz) / (isNum(target) && numOf(target) > 0 ? numOf(target) : 30) * 100;
+  if (p !== null) p = Math.max(0, Math.min(100, Math.round(p)));
+  let it = [['Juz', juz], ['Surah', surah], ['Ayat', ayat], ['Target', target], ['Terakhir setor', dtxt(tgl)]].filter(x => x[1] !== '');
+  if (!it.length && !ket && p === null) it = Object.keys(r).filter(k => k !== '__L' && !HK.name.includes(k) && String(r[k]).trim() !== '').slice(0, 6).map(k => [r.__L[k] || k, r[k]]);
+  const sName = String(surah).replace(/^\s*(surah|surat)\s+/i, '');
+  const big = surah !== '' ? 'Surah ' + sName + (ayat !== '' ? ' • Ayat ' + ayat : '') : juz !== '' ? 'Juz ' + juz : 'Hapalan Quran';
+  return `<div class="haf-top"><div class="ring" style="--p:${p === null ? 0 : p}" role="img" aria-label="${p === null ? 'Progres hapalan' : 'Progres hapalan ' + p + ' persen'}"><b>${p === null ? '📖' : p + '%'}</b></div><div class="haf-info"><div class="big">${esc(big)}</div><div class="mu" style="font-size:13px">${esc(S.me.name)} ${esc(S.me.title)}</div><div class="pb"><i style="width:${p === null ? 0 : p}%"></i></div></div></div>
+    ${it.length ? `<div class="haf-grid">${it.map(([k, v]) => `<div class="haf-it"><small>${esc(k)}</small><b>${esc(v)}</b></div>`).join('')}</div>` : ''}
+    ${ket !== '' ? `<div class="ann" style="margin-top:12px">${esc(ket)}</div>` : ''}`;
+}
+const hafDbg = d => d && Object.keys(d).length ? `<details class="mu" style="margin-top:10px;font-size:12px"><summary>Detail teknis</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere;margin-top:6px">${esc(['Status HTTP: ' + (d.http || '-'), 'Jumlah baris: ' + (d.rows == null ? '-' : d.rows), 'Kolom: ' + (d.cols || '-'), 'Nama (contoh): ' + (d.names || '-'), 'Respons awal: ' + (d.preview || '-')].concat(d.diag ? ['Diagnosis server: ' + d.diag] : []).join('\n'))}</pre></details>` : '';
+const hafCard = () => `<div class="glass card"><h3>🕋 Progres Hapalan Quran</h3><div id="haf">${hafBody()}</div></div>`;
+
+/* ---- Roster pelajaran sepekan (modal) ---- */
+function openRoster() {
+  const t = today();
+  const days = SCH.map(d => {
+    const r = (D.roster[d] || '').split('\n').map(s => s.trim()).filter(Boolean), now = d === t;
+    return `<div class="wd ${now ? 'now' : ''}" ${now ? 'aria-current="date"' : ''}><h4>${DAYS[d]}${now ? '<span class="tag">Hari ini</span>' : ''}</h4>${r.length ? `<ul>${r.map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : '<p class="mu" style="font-size:13px">Belum diisi Wali Kelas.</p>'}</div>`;
+  }).join('');
+  modal(`<div class="dh"><h3 style="margin:0">🗓️ Roster Pelajaran Sepekan</h3></div><p class="mu" style="margin-bottom:10px">Senin – Sabtu${t === 0 ? ' • Hari ini Minggu (libur)' : ''}</p><div class="wk">${days}</div><div class="mfoot"><button class="btn" data-a="close">Tutup</button></div>`, true);
+  setTimeout(() => { const n = $('.wd.now'); if (n) n.scrollIntoView({block:'nearest'}); }, 80);
+}
 
 /* ---- Panel Wali Kelas ---- */
 const cnt = (a, k, ks) => { const o = {}; ks.forEach(x => o[x] = 0); a.forEach(l => { o[l[k]] = (o[l[k]] || 0) + 1; }); return o; };
 const opts = (list, cur) => list.map(([v, l]) => `<option value="${v}" ${cur === v ? 'selected' : ''}>${l}</option>`).join('');
 
+/* Waktu riwayat sebagai angka (aman bila server mengirim teks/ISO) */
+const tv = l => { const n = +l.t; if (!isNaN(n)) return n; const d = new Date(l.t).getTime(); return isNaN(d) ? 0 : d; };
 function fl() {
   const q = S.q.trim().toLowerCase();
   const L = S.logs.filter(l =>
     (S.flt === 'all' || (S.flt === 'done') === !!l.done) &&
     (S.urg === 'all' || urgOf(l) === S.urg) &&
     (!q || [l.name, l.title, l.w, l.g, l.m, (l.chat || []).map(x => x.t).join(' ')].join(' ').toLowerCase().includes(q)));
-  L.sort(S.sort === 'urg' ? (a, b) => URG[urgOf(b)].n - URG[urgOf(a)].n || (!!a.done - !!b.done) || b.t - a.t : (a, b) => b.t - a.t);
+  L.sort(S.sort === 'urg' ? (a, b) => URG[urgOf(b)].n - URG[urgOf(a)].n || (!!a.done - !!b.done) || tv(b) - tv(a) : (a, b) => tv(b) - tv(a));
   return L;
 }
 function rlist() {
-  if (!S.logs.length) return `<div class="empty">${S.logsLoading ? 'Memuat…' : 'Belum ada riwayat curhat.'}</div>`;
+  if (!S.logs.length) return `<div class="empty">${S.logsLoading ? loader('Memuat riwayat', true) : 'Belum ada riwayat curhat.'}</div>`;
   const L = fl();
   if (!L.length) return '<div class="empty">Tidak ada data yang cocok dengan filter.</div>';
   return `<table class="rt"><thead><tr><th>Tanggal</th><th>Murid</th><th>Urgensi</th><th>Cuaca Hati</th><th>Pemicu</th><th>Catatan</th><th>Chat</th><th>Ditindaki</th><th>Aksi</th></tr></thead><tbody>${L.map(l => {
@@ -432,7 +600,7 @@ const G = {
     return `<div class="glass card"><div class="bar">
       <input type="search" data-i="q" value="${esc(S.q)}" placeholder="Cari nama, catatan, atau isi chat…" aria-label="Cari riwayat">
       <select data-c="flt" aria-label="Filter status">${opts([['all','Semua Status'],['open','Belum Ditindaki'],['done','Sudah Ditindaki']], S.flt)}</select>
-      <select data-c="sort" aria-label="Urutan">${opts([['urg','Urutkan: Urgensi'],['new','Urutkan: Terbaru']], S.sort)}</select>
+      <select data-c="sort" aria-label="Urutan">${opts([['new','Urutkan: Terbaru di atas'],['urg','Urutkan: Urgensi']], S.sort)}</select>
       <button class="btn gh sm" data-a="reload">↻ Muat ulang</button><button class="btn sm" data-a="xls">⬇ Excel</button><button class="btn sm" data-a="pdf">⬇ PDF</button></div>
       <div class="chips" style="margin-top:12px" role="group" aria-label="Filter tingkat urgensi">${chips.map(([k, l, n]) => `<button class="chip urg-${k} ${S.urg === k ? 'on' : ''}" data-a="urg" data-k="${k}" aria-pressed="${S.urg === k}">${l} <b>${n}</b></button>`).join('')}</div></div>
       <div class="glass card"><div class="tw" id="rlist">${rlist()}</div></div>`;
@@ -451,6 +619,7 @@ function render() {
   $('#app').innerHTML = `<main class="in">${head()}${b}</main>`;
   if (S.view === 'game') { paintPlant(); startAmb(); }
   if (S.view === 'chat') paintMsgs();
+  if (S.view === 'dash') loadHaf();
 }
 
 /* =====================================================================
@@ -493,7 +662,7 @@ function lockTeacher(msg) { S.unlocked = false; S.token = ''; S.logs = []; modal
 /* ---- Riwayat: muat, baca, ubah, hapus ---- */
 async function loadLogs() {
   S.logsLoading = true; if (S.view === 'guru') render();
-  try { S.logs = await api('getLogs', {}, {teacher:true}); }
+  try { const r = await api('getLogs', {}, {teacher:true}); S.logs = Array.isArray(r) ? r.slice().sort((a, b) => tv(b) - tv(a)) : r; }
   catch (e) { if (S.unlocked) toast('Gagal memuat riwayat: ' + e.message); }
   S.logsLoading = false; if (S.view === 'guru') render();
 }
@@ -634,6 +803,8 @@ document.addEventListener('click', e => {
   else if (a === 'yes') { const f = cb; cb = null; modal(''); if (f) f(); }
   else if (a === 'go') go(el.dataset.v);
   else if (a === 'retry') boot();
+  else if (a === 'roster') openRoster();
+  else if (a === 'hafretry') loadHaf(true);
   else if (a === 'tlogin') S.unlocked ? go('guru') : tlogin();
   else if (a === 'mute') { S.mute = !S.mute; if (S.mute) { stopAmb(); if (TTS) speechSynthesis.cancel(); } render(); }
   else if (a === 'endchat') endChat(k);
@@ -725,6 +896,7 @@ document.addEventListener('submit', e => {
   e.preventDefault(); const f = e.target.dataset.f;
   if (f === 'login') {
     const n = $('#sn').value, t = $('#st').value; if (!n || !t) return;
+    S.haf = {for:'', st:'idle', row:null, err:''};
     S.me = {name:n, title:t}; wel = false; speak(`Assalamu alaikum ${n}, mari bercerita bareng Sobat Murid.`);
     S.mood = {w:null, g:null, m:''}; S.saved = false; S.logId = null; S.msgs = []; S.p = 0; go('dash');
   }
@@ -748,6 +920,8 @@ document.addEventListener('submit', e => {
   }
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') modal(''); });
+/* Kartu roster dapat dibuka lewat keyboard */
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.dataset && e.target.dataset.a === 'roster') { e.preventDefault(); openRoster(); } });
 
 const firstGesture = e => { if (!wel || e.target.closest('[data-f=login]') || e.target.closest('.ov')) return; wel = false; speak('Selamat datang, Sobat Murid.'); };
 document.addEventListener('pointerdown', e => { const b = e.target.closest('button'); if (b && b.id !== 'sibtn' && !b.disabled) tick(); firstGesture(e); });
